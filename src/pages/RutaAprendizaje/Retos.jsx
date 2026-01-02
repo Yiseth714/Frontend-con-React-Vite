@@ -1,15 +1,11 @@
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
 
 export default function Retos() {
   const navigate = useNavigate();
 
-  // progreso simple (luego se mejora)
-  const [progreso] = useState({
-    reto1: true,
-    reto2: false,
-    reto3: false,
-  });
+  // leer progreso real desde localStorage
+  const reto1Completado = localStorage.getItem("reto1Completado") === "true";
+  const reto2Completado = localStorage.getItem("reto2Completado") === "true";
 
   return (
     <div className="min-h-screen bg-secondary p-8">
@@ -18,6 +14,8 @@ export default function Retos() {
       </h2>
 
       <div className="space-y-4">
+
+        {/* Reto 1 */}
         <button
           onClick={() => navigate("/ruta/retos/1")}
           className="block w-full bg-white p-4 rounded-lg"
@@ -25,20 +23,37 @@ export default function Retos() {
           Reto 1
         </button>
 
+        {/* Reto 2 */}
         <button
-          disabled
-          className="block w-full bg-gray-300 p-4 rounded-lg cursor-not-allowed"
+          onClick={() => navigate("/ruta/retos/2")}
+          disabled={!reto1Completado}
+          className={`block w-full p-4 rounded-lg ${
+            reto1Completado
+              ? "bg-white"
+              : "bg-gray-300 cursor-not-allowed"
+          }`}
         >
-          Reto 2 🔒
+          Reto 2 {reto1Completado ? "" : "🔒"}
         </button>
 
+        {/* Reto 3 */}
         <button
-          disabled
-          className="block w-full bg-gray-300 p-4 rounded-lg cursor-not-allowed"
+          onClick={() => navigate("/ruta/retos/3")}
+          disabled={!reto2Completado}
+          className={`block w-full p-4 rounded-lg ${
+            reto2Completado
+              ? "bg-white"
+              : "bg-gray-300 cursor-not-allowed"
+          }`}
         >
-          Reto 3 🔒
+          Reto 3 {reto2Completado ? "" : "🔒"}
         </button>
+
       </div>
     </div>
   );
 }
+
+
+
+
