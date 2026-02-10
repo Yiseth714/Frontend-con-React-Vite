@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 
 import diccionarioImg from "../assets/images/diccionario.png";
-import rutaImg from "../assets/images/ruta.png";
+import rutaImg from "../assets/images/ruta.jpeg";
 import traductorImg from "../assets/images/traductor.png";
 
 function HomePages() {
