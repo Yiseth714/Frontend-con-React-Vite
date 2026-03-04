@@ -3,6 +3,7 @@ import React, { useState } from 'react'
 // components
 import Navigation from '../components/navigation'
 import Post from '../components/home/Posts'
+import TranslatorControl from '../components/translator/TranslatorControl'
 import { usePosts } from '../hooks/usePosts'
 
 function Home() {
@@ -79,6 +80,8 @@ function Home() {
 
         {/* TITLE */}
         <h1 className="text-3xl font-bold mb-6">Home</h1>
+
+        <TranslatorControl />
 
         {/* SEARCH */}
         <input
