@@ -1,5 +1,7 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { useState } from "react";
+import { cerrarSesion, obtenerNombreUsuario } from "../../services/auth";
+import { marcarLeccionCompletada, actualizarProgreso } from "../../services/progreso";
 
 // CONTENIDO DE CADA RETO
 const retosData = {
@@ -101,18 +103,25 @@ export default function Reto() {
   const { id } = useParams();
   const navigate = useNavigate();
   const reto = retosData[id];
+  const nombreUsuario = obtenerNombreUsuario();
 
   const [respuestas, setRespuestas] = useState({});
   const [resultado, setResultado] = useState("");
+  const [cargando, setCargando] = useState(false);
 
   if (!reto) return <p className="p-8">Reto no encontrado</p>;
+
+  const handleLogout = () => {
+    cerrarSesion();
+    navigate('/login');
+  };
 
   const manejarCambio = (leccionIndex, opcionIndex) => {
     const letra = ["A", "B", "C"][opcionIndex];
     setRespuestas({ ...respuestas, [leccionIndex]: letra });
   };
 
-  const finalizarReto = () => {
+  const finalizarReto = async () => {
     let errores = 0;
 
     reto.respuestasCorrectas.forEach((correcta, index) => {
@@ -120,9 +129,29 @@ export default function Reto() {
     });
 
     if (errores === 0) {
-      localStorage.setItem(`reto${id}Completado`, "true");
-      setResultado("✅ Todas las respuestas son correctas. Reto desbloqueado.");
-      setTimeout(() => navigate("/ruta/retos"), 1500);
+      // Guardar en backend
+      setCargando(true);
+      try {
+        // Marcar cada lección como completada
+        for (let i = 0; i < reto.lecciones.length; i++) {
+          await marcarLeccionCompletada(parseInt(id), i + 1);
+        }
+        // Actualizar reto actual
+        const siguienteReto = parseInt(id) + 1;
+        if (siguienteReto <= 3) {
+          await actualizarProgreso(siguienteReto, 1);
+        }
+        setResultado("✅ Todas las respuestas son correctas. Progreso guardado!");
+        setTimeout(() => navigate("/ruta/retos"), 1500);
+      } catch (error) {
+        console.error("Error al guardar progreso:", error);
+        // También guardar en localStorage como respaldo
+        localStorage.setItem(`reto${id}Completado`, "true");
+        setResultado("✅ Correcto! (Guardado local)");
+        setTimeout(() => navigate("/ruta/retos"), 1500);
+      } finally {
+        setCargando(false);
+      }
     } else {
       setResultado(
         `❌ No se desbloqueó el siguiente reto. Respuestas incorrectas: ${errores}`
@@ -131,8 +160,25 @@ export default function Reto() {
   };
 
   return (
-    <div className="min-h-screen bg-secondary p-8 space-y-6">
-      <h2 className="text-2xl font-bold text-primary">{reto.titulo}</h2>
+    <div className="min-h-screen bg-secondary">
+      {/* HEADER */}
+      <header className="bg-primary text-white px-6 py-4">
+        <div className="max-w-6xl mx-auto flex justify-between items-center">
+          <h1 className="text-xl font-bold">SeñaGo - {reto.titulo}</h1>
+          <div className="flex items-center gap-4">
+            <span className="text-sm">Hola, {nombreUsuario || 'Usuario'}</span>
+            <button
+              onClick={handleLogout}
+              className="bg-white text-primary px-4 py-2 rounded-lg font-semibold hover:bg-gray-100 transition"
+            >
+              Cerrar Sesión
+            </button>
+          </div>
+        </div>
+      </header>
+
+      <div className="p-8 space-y-6">
+        <h2 className="text-2xl font-bold text-primary">{reto.titulo}</h2>
 
       {reto.lecciones.map((leccion, index) => (
         <div key={index} className="bg-white p-6 rounded-lg">
@@ -161,12 +207,16 @@ export default function Reto() {
 
       <button
         onClick={finalizarReto}
-        className="bg-primary text-white px-6 py-2 rounded-lg"
+        disabled={cargando}
+        className={`bg-primary text-white px-6 py-2 rounded-lg ${
+          cargando ? 'opacity-50 cursor-not-allowed' : ''
+        }`}
       >
-        Finalizar reto
+        {cargando ? 'Guardando...' : 'Finalizar reto'}
       </button>
 
       {resultado && <p className="mt-4 font-semibold">{resultado}</p>}
+      </div>
     </div>
   );
 }
