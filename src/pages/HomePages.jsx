@@ -1,4 +1,5 @@
 import { useNavigate } from "react-router-dom";
+import { cerrarSesion, obtenerNombreUsuario } from "../services/auth";
 
 import diccionarioImg from "../assets/images/diccionario.png";
 import rutaImg from "../assets/images/ruta.jpeg";
@@ -6,9 +7,31 @@ import traductorImg from "../assets/images/traductor.png";
 
 function HomePages() {
   const navigate = useNavigate();
+  const nombreUsuario = obtenerNombreUsuario();
+
+  const handleLogout = () => {
+    cerrarSesion();
+    navigate('/login');
+  };
 
   return (
     <div className="min-h-screen bg-secondary flex flex-col">
+
+      {/* HEADER CON LOGOUT */}
+      <header className="bg-primary text-white px-6 py-4">
+        <div className="max-w-6xl mx-auto flex justify-between items-center">
+          <h1 className="text-xl font-bold">SeñaGo</h1>
+          <div className="flex items-center gap-4">
+            <span className="text-sm">Hola, {nombreUsuario || 'Usuario'}</span>
+            <button
+              onClick={handleLogout}
+              className="bg-white text-primary px-4 py-2 rounded-lg font-semibold hover:bg-gray-100 transition"
+            >
+              Cerrar Sesión
+            </button>
+          </div>
+        </div>
+      </header>
 
       {/* CONTENIDO PRINCIPAL */}
       <main className="flex-grow flex flex-col items-center justify-center px-6">
