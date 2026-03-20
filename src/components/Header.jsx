@@ -51,27 +51,23 @@ function Header() {
         </button>
 
         {/* Navegación (desktop) */}
-        <nav className="hidden md:flex items-center gap-2">
-          <Link to="/diccionario" className="px-4 py-2 rounded-lg hover:bg-white/10 transition flex items-center gap-2 font-medium">
+        <nav className="hidden md:flex items-center gap-6">
+          <Link to="/diccionario" className="px-3 py-2 rounded-lg hover:bg-white/10 transition flex items-center gap-2 font-medium whitespace-nowrap">
             <span>📖</span>
             <span>Diccionario</span>
           </Link>
-          <Link to="/ruta" className="px-4 py-2 rounded-lg hover:bg-white/10 transition flex items-center gap-2 font-medium">
-            <span>🎯</span>
-            <span>Ruta de Aprendizaje</span>
-          </Link>
-          <Link to="/traductor" className="px-4 py-2 rounded-lg hover:bg-white/10 transition flex items-center gap-2 font-medium">
+          <Link to="/traductor" className="px-3 py-2 rounded-lg hover:bg-white/10 transition flex items-center gap-2 font-medium whitespace-nowrap">
             <span>✋</span>
             <span>Traductor</span>
           </Link>
           {autenticado && (
             <>
-              <Link to="/perfil" className="px-4 py-2 rounded-lg hover:bg-white/10 transition flex items-center gap-2 font-medium">
+              <Link to="/perfil" className="px-3 py-2 rounded-lg hover:bg-white/10 transition flex items-center gap-2 font-medium whitespace-nowrap">
                 <span>👤</span>
-                <span>Mi Perfil</span>
+                <span>Perfil</span>
               </Link>
               {esAdmin && (
-                <Link to="/admin" className="px-4 py-2 rounded-lg hover:bg-white/10 transition flex items-center gap-2 font-medium bg-purple-600">
+                <Link to="/admin" className="px-3 py-2 rounded-lg hover:bg-white/10 transition flex items-center gap-2 font-medium bg-purple-600 whitespace-nowrap">
                   <span>⚙️</span>
                   <span>Admin</span>
                 </Link>
@@ -80,11 +76,14 @@ function Header() {
           )}
         </nav>
 
+        {/* Separador visual */}
+        <div className="hidden md:block w-px h-10 bg-white/40 mx-4"></div>
+
         {/* Auth buttons (desktop) */}
-        <div className="hidden md:flex items-center gap-3">
+        <div className="hidden md:flex items-center gap-4">
           {autenticado ? (
             <>
-              <div className="flex items-center gap-2 bg-white/10 px-4 py-2 rounded-full">
+              <div className="flex items-center gap-2 bg-white/10 px-3 py-2 rounded-full whitespace-nowrap">
                 <span className="text-lg">👋</span>
                 <span className="font-medium">
                   Hola, {nombreUsuario || 'Usuario'}

@@ -12,6 +12,7 @@ import {
     cambiarTipoUsuario,
     obtenerProgresoUsuario,
     obtenerLogrosUsuario,
+    actualizarUsuario,
 } from "../services/admin";
 import { obtenerNombreUsuario } from "../services/auth";
 
@@ -28,6 +29,15 @@ function Admin() {
     const [progresoUsuario, setProgresoUsuario] = useState(null);
     const [logrosUsuario, setLogrosUsuario] = useState([]);
     const [cargandoDetalle, setCargandoDetalle] = useState(false);
+    
+    // Estado para modal de edición
+    const [usuarioEditando, setUsuarioEditando] = useState(null);
+    const [editForm, setEditForm] = useState({
+        nombre_usuario: '',
+        discapacidad: 'ninguna',
+        nueva_contrasena: ''
+    });
+    const [guardando, setGuardando] = useState(false);
 
     // Cargar datos al montar
     useEffect(() => {
@@ -109,6 +119,58 @@ function Admin() {
         }
     };
 
+    // Funciones para editar usuario
+    const abrirEditarUsuario = (usuario) => {
+        setUsuarioEditando(usuario);
+        setEditForm({
+            nombre_usuario: usuario.nombre_usuario || '',
+            discapacidad: usuario.discapacidad || 'ninguna',
+            nueva_contrasena: ''
+        });
+    };
+
+    const cerrarEditarUsuario = () => {
+        setUsuarioEditando(null);
+        setEditForm({
+            nombre_usuario: '',
+            discapacidad: 'ninguna',
+            nueva_contrasena: ''
+        });
+    };
+
+    const handleGuardarEdicion = async (e) => {
+        e.preventDefault();
+        setGuardando(true);
+
+        try {
+            const datos = {};
+            if (editForm.nombre_usuario !== usuarioEditando.nombre_usuario) {
+                datos.nombre_usuario = editForm.nombre_usuario;
+            }
+            if (editForm.discapacidad !== usuarioEditando.discapacidad) {
+                datos.discapacidad = editForm.discapacidad;
+            }
+            if (editForm.nueva_contrasena) {
+                datos.nueva_contrasena = editForm.nueva_contrasena;
+            }
+
+            if (Object.keys(datos).length === 0) {
+                alert("No hay cambios para guardar");
+                setGuardando(false);
+                return;
+            }
+
+            await actualizarUsuario(usuarioEditando.id, datos);
+            alert("Usuario actualizado exitosamente");
+            cargarDatos();
+            cerrarEditarUsuario();
+        } catch (err) {
+            alert(err.message);
+        } finally {
+            setGuardando(false);
+        }
+    };
+
     if (cargando) {
         return (
             <div className="flex items-center justify-center min-h-[60vh]">
@@ -142,7 +204,7 @@ function Admin() {
             {/* Título */}
             <div className="mb-8">
                 <h1 className="text-3xl font-bold text-primary">Panel de Administrador</h1>
-                <p className="text-gray-600">Bienvenido, {nombreUsuario}</p>
+                <p className="text-gray-600">Bienvenida, {nombreUsuario}</p>
             </div>
 
             {/* Estadísticas */}
@@ -220,6 +282,12 @@ function Admin() {
                                                     Ver
                                                 </button>
                                                 <button
+                                                    onClick={() => abrirEditarUsuario(usuario)}
+                                                    className="text-green-600 hover:text-green-800 text-sm font-medium"
+                                                >
+                                                    Editar
+                                                </button>
+                                                <button
                                                     onClick={() => handleCambiarTipo(usuario.id, usuario.nombre_usuario, usuario.tipo_usuario)}
                                                     className="text-purple-600 hover:text-purple-800 text-sm font-medium"
                                                 >
@@ -284,15 +352,15 @@ function Admin() {
 
                             {/* Progreso */}
                             <div>
-                                <h3 className="font-bold text-primary mb-2">Progreso</h3>
+                                <h3 className="font-bold text-primary mb-2">Progreso en Retos</h3>
                                 {cargandoDetalle ? (
                                     <p className="text-gray-500">Cargando...</p>
                                 ) : progresoUsuario ? (
-                                    <div className="bg-gray-50 p-4 rounded-lg">
-                                        <p>Reto actual: {progresoUsuario.reto_actual}</p>
-                                        <p>Lección actual: {progresoUsuario.leccion_actual}</p>
+                                    <div className="bg-gray-50 p-4 rounded-lg space-y-2">
+                                        <p><span className="font-medium">Reto actual:</span> {progresoUsuario.reto_actual}</p>
+                                        <p><span className="font-medium">Lección actual:</span> {progresoUsuario.leccion_actual}</p>
                                         <p className="text-sm text-gray-500">
-                                            Lecciones completadas: {progresoUsuario.lecciones_completadas || "Ninguna"}
+                                            <span className="font-medium">Lecciones completadas:</span> {progresoUsuario.lecciones_completadas || "Ninguna"}
                                         </p>
                                     </div>
                                 ) : (
@@ -302,7 +370,7 @@ function Admin() {
 
                             {/* Logros */}
                             <div>
-                                <h3 className="font-bold text-primary mb-2">Logros ({logrosUsuario.length})</h3>
+                                <h3 className="font-bold text-primary mb-2">Logros Obtenidos ({logrosUsuario.length})</h3>
                                 {cargandoDetalle ? (
                                     <p className="text-gray-500">Cargando...</p>
                                 ) : logrosUsuario.length > 0 ? (
@@ -319,6 +387,90 @@ function Admin() {
                                 )}
                             </div>
                         </div>
+                    </div>
+                </div>
+            )}
+
+            {/* Modal de Edición */}
+            {usuarioEditando && (
+                <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
+                    <div className="bg-white rounded-2xl max-w-md w-full">
+                        <div className="p-6 border-b flex justify-between items-center">
+                            <h2 className="text-xl font-bold text-primary">
+                                Editar Usuario
+                            </h2>
+                            <button
+                                onClick={cerrarEditarUsuario}
+                                className="text-gray-400 hover:text-gray-600 text-2xl"
+                            >
+                                ×
+                            </button>
+                        </div>
+
+                        <form onSubmit={handleGuardarEdicion} className="p-6 space-y-4">
+                            <div>
+                                <label className="block text-sm font-medium text-gray-700 mb-1">
+                                    Nombre de usuario
+                                </label>
+                                <input
+                                    type="text"
+                                    value={editForm.nombre_usuario}
+                                    onChange={(e) => setEditForm({...editForm, nombre_usuario: e.target.value})}
+                                    className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+                                    minLength={3}
+                                    required
+                                />
+                            </div>
+
+                            <div>
+                                <label className="block text-sm font-medium text-gray-700 mb-1">
+                                    Discapacidad
+                                </label>
+                                <select
+                                    value={editForm.discapacidad}
+                                    onChange={(e) => setEditForm({...editForm, discapacidad: e.target.value})}
+                                    className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+                                >
+                                    <option value="ninguna">Ninguna</option>
+                                    <option value="persona_sorda">Persona Sorda</option>
+                                    <option value="otra">Otra</option>
+                                </select>
+                            </div>
+
+                            <div>
+                                <label className="block text-sm font-medium text-gray-700 mb-1">
+                                    Nueva contraseña
+                                </label>
+                                <input
+                                    type="password"
+                                    value={editForm.nueva_contrasena}
+                                    onChange={(e) => setEditForm({...editForm, nueva_contrasena: e.target.value})}
+                                    className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+                                    placeholder="Dejar vacío para no cambiar"
+                                    minLength={4}
+                                />
+                                <p className="text-xs text-gray-500 mt-1">
+                                    Mínimo 4 caracteres. Dejar vacío si no desea cambiar.
+                                </p>
+                            </div>
+
+                            <div className="flex gap-3 pt-4">
+                                <button
+                                    type="button"
+                                    onClick={cerrarEditarUsuario}
+                                    className="flex-1 px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50"
+                                >
+                                    Cancelar
+                                </button>
+                                <button
+                                    type="submit"
+                                    disabled={guardando}
+                                    className="flex-1 px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary/90 disabled:opacity-50"
+                                >
+                                    {guardando ? 'Guardando...' : 'Guardar cambios'}
+                                </button>
+                            </div>
+                        </form>
                     </div>
                 </div>
             )}

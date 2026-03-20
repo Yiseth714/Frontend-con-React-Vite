@@ -206,3 +206,34 @@ export async function cambiarTipoUsuario(usuarioId, nuevoTipo) {
         throw error;
     }
 }
+
+/**
+ * Actualizar usuario
+ * Endpoint: PUT /api/v1/admin/usuarios/{id}
+ * @param {number} usuarioId - ID del usuario
+ * @param {Object} datos - Datos a actualizar {nombre_usuario, discapacidad, nueva_contrasena}
+ * @returns {Object} - Usuario actualizado
+ */
+export async function actualizarUsuario(usuarioId, datos) {
+    try {
+        const response = await fetch(
+            `${API_BASE_URL}/admin/usuarios/${usuarioId}`,
+            {
+                method: 'PUT',
+                headers: obtenerHeaders(),
+                body: JSON.stringify(datos),
+            }
+        );
+
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.detail || 'Error al actualizar usuario');
+        }
+
+        const data = await response.json();
+        return data;
+    } catch (error) {
+        console.error('Error en actualizarUsuario:', error);
+        throw error;
+    }
+}
