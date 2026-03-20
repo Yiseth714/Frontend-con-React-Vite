@@ -1,7 +1,7 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { useState } from "react";
-import { cerrarSesion, obtenerNombreUsuario } from "../../services/auth";
 import { marcarLeccionCompletada, actualizarProgreso } from "../../services/progreso";
+import { crearLogro, NOMBRES_LOGROS, DESCRIPCIONES_LOGROS } from "../../services/logros";
 
 // CONTENIDO DE CADA RETO
 const retosData = {
@@ -103,18 +103,12 @@ export default function Reto() {
   const { id } = useParams();
   const navigate = useNavigate();
   const reto = retosData[id];
-  const nombreUsuario = obtenerNombreUsuario();
 
   const [respuestas, setRespuestas] = useState({});
   const [resultado, setResultado] = useState("");
   const [cargando, setCargando] = useState(false);
 
   if (!reto) return <p className="p-8">Reto no encontrado</p>;
-
-  const handleLogout = () => {
-    cerrarSesion();
-    navigate('/login');
-  };
 
   const manejarCambio = (leccionIndex, opcionIndex) => {
     const letra = ["A", "B", "C"][opcionIndex];
@@ -132,23 +126,86 @@ export default function Reto() {
       // Guardar en backend
       setCargando(true);
       try {
+        console.log("=== INICIANDO GUARDADO DE PROGRESO ===");
+        
         // Marcar cada lección como completada
         for (let i = 0; i < reto.lecciones.length; i++) {
+          console.log(`Marcando lección ${i+1} del reto ${id}...`);
           await marcarLeccionCompletada(parseInt(id), i + 1);
         }
+        
         // Actualizar reto actual
         const siguienteReto = parseInt(id) + 1;
         if (siguienteReto <= 3) {
+          console.log(`Actualizando progreso: siguiente reto = ${siguienteReto}`);
           await actualizarProgreso(siguienteReto, 1);
         }
-        setResultado("✅ Todas las respuestas son correctas. Progreso guardado!");
-        setTimeout(() => navigate("/ruta/retos"), 1500);
+        console.log("✓ Progreso guardado exitosamente");
+
+        // ==================== CREAR LOGROS ====================
+        let logrosGanados = [];
+
+        // Logro: Cada lección completada (una por cada pregunta del reto)
+        const leccionesDelReto = {
+            1: [NOMBRES_LOGROS.LECCION_1_1, NOMBRES_LOGROS.LECCION_1_2, NOMBRES_LOGROS.LECCION_1_3],
+            2: [NOMBRES_LOGROS.LECCION_2_1, NOMBRES_LOGROS.LECCION_2_2, NOMBRES_LOGROS.LECCION_2_3],
+            3: [NOMBRES_LOGROS.LECCION_3_1, NOMBRES_LOGROS.LECCION_3_2, NOMBRES_LOGROS.LECCION_3_3],
+        };
+
+        const leccionesKeys = leccionesDelReto[parseInt(id)] || [];
+        for (let i = 0; i < leccionesKeys.length; i++) {
+            try {
+                await crearLogro(
+                    leccionesKeys[i],
+                    DESCRIPCIONES_LOGROS[leccionesKeys[i]]
+                );
+                logrosGanados.push(`Lección ${i + 1}`);
+            } catch {
+                // Ya tiene este logro, no hacer nada
+            }
+        }
+
+        // Logro: Primera lección completada (solo una vez)
+        try {
+            await crearLogro(
+                NOMBRES_LOGROS.PRIMERA_LECCION,
+                DESCRIPCIONES_LOGROS[NOMBRES_LOGROS.PRIMERA_LECCION]
+            );
+            // Solo agregar si no existe ya en logrosGanados
+            if (!logrosGanados.includes("Primera Lección")) {
+                logrosGanados.push("Primera Lección");
+            }
+        } catch {
+            // Ya tiene este logro, no hacer nada
+        }
+
+        // Logro: Reto completado
+        const logroRetoKey = `RETO_${id}_COMPLETADO`;
+        if (NOMBRES_LOGROS[logroRetoKey]) {
+          try {
+            await crearLogro(
+              NOMBRES_LOGROS[logroRetoKey],
+              DESCRIPCIONES_LOGROS[NOMBRES_LOGROS[logroRetoKey]]
+            );
+            logrosGanados.push(`Reto ${id} Completado`);
+          } catch {
+            // Ya tiene este logro
+          }
+        }
+
+        // Mostrar resultado con logros
+        if (logrosGanados.length > 0) {
+          setResultado(`✅ ¡Felicidades! Ganaste: ${logrosGanados.join(" + ")}!`);
+        } else {
+          setResultado("✅ Todas las respuestas son correctas. Progreso guardado!");
+        }
+
+        setTimeout(() => navigate("/ruta/retos"), 2000);
       } catch (error) {
-        console.error("Error al guardar progreso:", error);
-        // También guardar en localStorage como respaldo
-        localStorage.setItem(`reto${id}Completado`, "true");
-        setResultado("✅ Correcto! (Guardado local)");
-        setTimeout(() => navigate("/ruta/retos"), 1500);
+        console.error("❌ ERROR AL GUARDAR PROGRESO:", error);
+        // Mostrar el error real al usuario
+        setResultado(`❌ Error: ${error.message}`);
+        setTimeout(() => {}, 3000);
       } finally {
         setCargando(false);
       }
@@ -160,34 +217,17 @@ export default function Reto() {
   };
 
   return (
-    <div className="min-h-screen bg-secondary">
-      {/* HEADER */}
-      <header className="bg-primary text-white px-6 py-4">
-        <div className="max-w-6xl mx-auto flex justify-between items-center">
-          <h1 className="text-xl font-bold">SeñaGo - {reto.titulo}</h1>
-          <div className="flex items-center gap-4">
-            <span className="text-sm">Hola, {nombreUsuario || 'Usuario'}</span>
-            <button
-              onClick={handleLogout}
-              className="bg-white text-primary px-4 py-2 rounded-lg font-semibold hover:bg-gray-100 transition"
-            >
-              Cerrar Sesión
-            </button>
-          </div>
-        </div>
-      </header>
-
-      <div className="p-8 space-y-6">
+    <div className="p-4 md:p-8 space-y-6">
         <h2 className="text-2xl font-bold text-primary">{reto.titulo}</h2>
 
       {reto.lecciones.map((leccion, index) => (
-        <div key={index} className="bg-white p-6 rounded-lg">
+        <div key={index} className="bg-white p-4 md:p-6 rounded-lg">
           <h3 className="font-semibold mb-2">Lección {index + 1}</h3>
 
           <img
             src={leccion.imagen}
             alt={`Seña reto ${id} lección ${index + 1}`}
-            className="h-40 mx-auto mb-4 object-contain"
+            className="h-32 md:h-40 mx-auto mb-4 object-contain"
           />
 
           <p className="mb-2">{leccion.pregunta}</p>
@@ -216,7 +256,6 @@ export default function Reto() {
       </button>
 
       {resultado && <p className="mt-4 font-semibold">{resultado}</p>}
-      </div>
     </div>
   );
 }

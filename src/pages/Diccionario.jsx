@@ -1,7 +1,5 @@
 
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { cerrarSesion, obtenerNombreUsuario } from "../services/auth";
 
 // Abecedario
 const letras = [
@@ -67,13 +65,6 @@ export default function Diccionario() {
   const [seccion, setSeccion] = useState("letras");
   const [activo, setActivo] = useState(null);
   const [busqueda, setBusqueda] = useState("");
-  const navigate = useNavigate();
-  const nombreUsuario = obtenerNombreUsuario();
-
-  const handleLogout = () => {
-    cerrarSesion();
-    navigate('/login');
-  };
 
   const letrasFiltradas = letras.filter(l =>
     l.toLowerCase().includes(busqueda.toLowerCase())
@@ -84,24 +75,7 @@ export default function Diccionario() {
   );
 
   return (
-    <div className="min-h-screen bg-secondary">
-      {/* HEADER */}
-      <header className="bg-primary text-white px-6 py-4">
-        <div className="max-w-6xl mx-auto flex justify-between items-center">
-          <h1 className="text-xl font-bold">SeñaGo - Diccionario</h1>
-          <div className="flex items-center gap-4">
-            <span className="text-sm">Hola, {nombreUsuario || 'Usuario'}</span>
-            <button
-              onClick={handleLogout}
-              className="bg-white text-primary px-4 py-2 rounded-lg font-semibold hover:bg-gray-100 transition"
-            >
-              Cerrar Sesión
-            </button>
-          </div>
-        </div>
-      </header>
-
-      <div className="p-8">
+    <div className="p-4 md:p-8">
         <h2 className="text-3xl font-bold text-primary mb-6">
         Diccionario de Lengua de Señas
       </h2>
@@ -224,7 +198,6 @@ export default function Diccionario() {
           />
         </div>
       )}
-    </div>
     </div>
   );
 }

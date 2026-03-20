@@ -85,9 +85,21 @@ export async function crearLogro(nombre_logro, descripcion = null) {
  * Constantes con los nombres de logros predefinidos
  */
 export const NOMBRES_LOGROS = {
+    // Logros por lección individual
+    LECCION_1_1: 'leccion_1_1',
+    LECCION_1_2: 'leccion_1_2',
+    LECCION_1_3: 'leccion_1_3',
+    LECCION_2_1: 'leccion_2_1',
+    LECCION_2_2: 'leccion_2_2',
+    LECCION_2_3: 'leccion_2_3',
+    LECCION_3_1: 'leccion_3_1',
+    LECCION_3_2: 'leccion_3_2',
+    LECCION_3_3: 'leccion_3_3',
+    // Logros por retos completados
     RETO_1_COMPLETADO: 'reto_1_completado',
     RETO_2_COMPLETADO: 'reto_2_completado',
     RETO_3_COMPLETADO: 'reto_3_completado',
+    // Logros especiales
     PRIMERA_LECCION: 'primera_leccion',
     PRIMER_RETO: 'primer_reto',
 };
@@ -96,9 +108,23 @@ export const NOMBRES_LOGROS = {
  * Descripciones predefinidas para los logros
  */
 export const DESCRIPCIONES_LOGROS = {
+    // Lecciones Reto 1
+    [NOMBRES_LOGROS.LECCION_1_1]: 'Completaste la lección 1 del Reto 1',
+    [NOMBRES_LOGROS.LECCION_1_2]: 'Completaste la lección 2 del Reto 1',
+    [NOMBRES_LOGROS.LECCION_1_3]: 'Completaste la lección 3 del Reto 1',
+    // Lecciones Reto 2
+    [NOMBRES_LOGROS.LECCION_2_1]: 'Completaste la lección 1 del Reto 2',
+    [NOMBRES_LOGROS.LECCION_2_2]: 'Completaste la lección 2 del Reto 2',
+    [NOMBRES_LOGROS.LECCION_2_3]: 'Completaste la lección 3 del Reto 2',
+    // Lecciones Reto 3
+    [NOMBRES_LOGROS.LECCION_3_1]: 'Completaste la lección 1 del Reto 3',
+    [NOMBRES_LOGROS.LECCION_3_2]: 'Completaste la lección 2 del Reto 3',
+    [NOMBRES_LOGROS.LECCION_3_3]: 'Completaste la lección 3 del Reto 3',
+    // Retos completados
     [NOMBRES_LOGROS.RETO_1_COMPLETADO]: '¡Felicidades! Has completado el Reto 1',
     [NOMBRES_LOGROS.RETO_2_COMPLETADO]: '¡Felicidades! Has completado el Reto 2',
     [NOMBRES_LOGROS.RETO_3_COMPLETADO]: '¡Felicidades! Has completado el Reto 3',
+    // Logros especiales
     [NOMBRES_LOGROS.PRIMERA_LECCION]: 'Has completado tu primera lección',
     [NOMBRES_LOGROS.PRIMER_RETO]: 'Has comenzado tu primer reto',
 };

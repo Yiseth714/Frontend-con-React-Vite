@@ -59,6 +59,11 @@ export async function iniciarSesion(nombre_usuario, contrasena) {
         // También guardamos el nombre de usuario para mostrarlo
         localStorage.setItem('nombre_usuario', nombre_usuario);
 
+        // Guardamos el tipo de usuario si viene en la respuesta
+        if (data.tipo_usuario) {
+            localStorage.setItem('tipo_usuario', data.tipo_usuario);
+        }
+
         return data;
     } catch (error) {
         console.error('Error en iniciarSesion:', error);
@@ -154,4 +159,20 @@ export function estaAutenticado() {
  */
 export function obtenerNombreUsuario() {
     return localStorage.getItem('nombre_usuario');
+}
+
+/**
+ * Obtener el tipo de usuario actual
+ * @returns {string|null} - Tipo de usuario ('normal' o 'administrador') o null
+ */
+export function obtenerTipoUsuario() {
+    return localStorage.getItem('tipo_usuario');
+}
+
+/**
+ * Verificar si el usuario es administrador
+ * @returns {boolean} - True si es administrador
+ */
+export function esAdministrador() {
+    return localStorage.getItem('tipo_usuario') === 'administrador';
 }

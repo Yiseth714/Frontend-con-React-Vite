@@ -1,12 +1,11 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import { cerrarSesion, obtenerNombreUsuario } from "../../services/auth";
+import { useNavigate, useLocation } from "react-router-dom";
 import { obtenerProgreso } from "../../services/progreso";
 import { estaLeccionCompletada } from "../../services/progreso";
 
 export default function Retos() {
   const navigate = useNavigate();
-  const nombreUsuario = obtenerNombreUsuario();
+  const location = useLocation();
   const [progreso, setProgreso] = useState(null);
   const [cargando, setCargando] = useState(true);
 
@@ -22,12 +21,7 @@ export default function Retos() {
       }
     };
     cargarProgreso();
-  }, []);
-
-  const handleLogout = () => {
-    cerrarSesion();
-    navigate('/login');
-  };
+  }, [location.pathname]);
 
   // Verificar si un reto está disponible
   const isRetoDesbloqueado = (numeroReto) => {
@@ -39,24 +33,7 @@ export default function Retos() {
   };
 
   return (
-    <div className="min-h-screen bg-secondary">
-      {/* HEADER */}
-      <header className="bg-primary text-white px-6 py-4">
-        <div className="max-w-6xl mx-auto flex justify-between items-center">
-          <h1 className="text-xl font-bold">SeñaGo - Retos</h1>
-          <div className="flex items-center gap-4">
-            <span className="text-sm">Hola, {nombreUsuario || 'Usuario'}</span>
-            <button
-              onClick={handleLogout}
-              className="bg-white text-primary px-4 py-2 rounded-lg font-semibold hover:bg-gray-100 transition"
-            >
-              Cerrar Sesión
-            </button>
-          </div>
-        </div>
-      </header>
-
-      <div className="p-8">
+    <div className="p-8">
         <h2 className="text-2xl font-bold text-primary mb-6">
           Retos disponibles
         </h2>
@@ -71,7 +48,7 @@ export default function Retos() {
               onClick={() => navigate("/ruta/retos/1")}
               className="block w-full bg-white p-4 rounded-lg hover:bg-gray-50 transition"
             >
-              Reto 1 - Basics
+              Reto 1
             </button>
 
             {/* Reto 2 */}
@@ -84,7 +61,7 @@ export default function Retos() {
                   : "bg-gray-300 cursor-not-allowed"
               }`}
             >
-              Reto 2 - Intermediate {isRetoDesbloqueado(2) ? "" : "🔒"}
+              Reto 2 {isRetoDesbloqueado(2) ? "" : "🔒"}
             </button>
 
             {/* Reto 3 */}
@@ -97,12 +74,11 @@ export default function Retos() {
                   : "bg-gray-300 cursor-not-allowed"
               }`}
             >
-              Reto 3 - Advanced {isRetoDesbloqueado(3) ? "" : "🔒"}
+              Reto 3 {isRetoDesbloqueado(3) ? "" : "🔒"}
             </button>
 
           </div>
         )}
-      </div>
     </div>
   );
 }

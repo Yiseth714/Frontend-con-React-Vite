@@ -34,6 +34,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom'
 
 // Componentes
 import ProtectedRoute from './components/ProtectedRoute'
+import Layout from './components/Layout'
 
 // Pages generales
 import Login from './pages/Login.jsx'
@@ -41,6 +42,8 @@ import Registro from './pages/Registro.jsx'
 import Home from './pages/HomePages.jsx'
 import Diccionario from './pages/Diccionario.jsx'
 import Traductor from './pages/Traductor.jsx'
+import Profile from './pages/Profile.jsx'
+import Admin from './pages/Admin.jsx'
 
 // Ruta de Aprendizaje
 import RutaHome from './pages/RutaAprendizaje/RutaHome.jsx'
@@ -51,52 +54,66 @@ function Router() {
   return (
     <BrowserRouter>
       <Routes>
-        {/* Rutas públicas */}
+        {/* Rutas públicas (sin Layout) */}
         <Route path="/login" element={<Login />} />
         <Route path="/registro" element={<Registro />} />
-        <Route path="/" element={<Home />} />
 
-        {/* Rutas protegidas - requieren autenticación */}
-        <Route
-          path="/diccionario"
-          element={
-            <ProtectedRoute>
-              <Diccionario />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/traductor"
-          element={
-            <ProtectedRoute>
-              <Traductor />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/ruta"
-          element={
-            <ProtectedRoute>
-              <RutaHome />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/ruta/retos"
-          element={
-            <ProtectedRoute>
-              <Retos />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/ruta/retos/:id"
-          element={
-            <ProtectedRoute>
-              <Reto />
-            </ProtectedRoute>
-          }
-        />
+        {/* Rutas con Layout (Header + Footer) */}
+        <Route element={<Layout />}>
+          {/* Ruta pública */}
+          <Route path="/" element={<Home />} />
+          <Route path="/traductor" element={<Traductor />} />
+
+          {/* Rutas protegidas - requieren autenticación */}
+          <Route
+            path="/diccionario"
+            element={
+              <ProtectedRoute>
+                <Diccionario />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/ruta"
+            element={
+              <ProtectedRoute>
+                <RutaHome />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/ruta/retos"
+            element={
+              <ProtectedRoute>
+                <Retos />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/ruta/retos/:id"
+            element={
+              <ProtectedRoute>
+                <Reto />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/perfil"
+            element={
+              <ProtectedRoute>
+                <Profile />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/admin"
+            element={
+              <ProtectedRoute>
+                <Admin />
+              </ProtectedRoute>
+            }
+          />
+        </Route>
       </Routes>
     </BrowserRouter>
   )

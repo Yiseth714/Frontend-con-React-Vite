@@ -71,8 +71,8 @@ function Registro() {
     };
 
     return (
-        <div className="min-h-screen bg-secondary flex items-center justify-center px-4 py-8">
-            <div className="bg-white rounded-2xl shadow-xl p-8 w-full max-w-md animate-fadeIn">
+        <div className="min-h-screen bg-gradient-to-br from-primary via-primary to-accent flex items-center justify-center px-4 py-12">
+            <div className="bg-white/95 backdrop-blur-sm rounded-2xl shadow-2xl p-8 w-full max-w-md animate-fadeIn border border-white/20">
 
                 {/* Título */}
                 <h1 className="text-3xl font-bold text-primary text-center mb-2">
