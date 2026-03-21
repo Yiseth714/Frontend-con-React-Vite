@@ -43,7 +43,7 @@ import Home from './pages/HomePages.jsx'
 import Diccionario from './pages/Diccionario.jsx'
 import Traductor from './pages/Traductor.jsx'
 import Profile from './pages/Profile.jsx'
-import Admin from './pages/Admin.jsx'
+import Admin from './pages/admin/index.jsx'
 
 // Ruta de Aprendizaje
 import RutaHome from './pages/RutaAprendizaje/RutaHome.jsx'

@@ -30,9 +30,11 @@ function Header() {
         
         {/* Logo */}
         <Link to="/" className="text-2xl font-bold flex items-center gap-2 hover:opacity-90 transition">
-          <span className="text-3xl">👋</span>
           <span className="bg-gradient-to-r from-white to-blue-200 bg-clip-text text-transparent">SeñaGo</span>
         </Link>
+
+        {/* Separador visual */}
+        <div className="hidden md:block w-px h-10 bg-white/40 mx-4"></div>
 
         {/* Botón hamburguesa (visible solo en móvil) */}
         <button 
@@ -55,6 +57,10 @@ function Header() {
           <Link to="/diccionario" className="px-3 py-2 rounded-lg hover:bg-white/10 transition flex items-center gap-2 font-medium whitespace-nowrap">
             <span>📖</span>
             <span>Diccionario</span>
+          </Link>
+          <Link to="/ruta" className="px-3 py-2 rounded-lg hover:bg-white/10 transition flex items-center gap-2 font-medium whitespace-nowrap">
+            <span>🎯</span>
+            <span>Ruta de Aprendizaje</span>
           </Link>
           <Link to="/traductor" className="px-3 py-2 rounded-lg hover:bg-white/10 transition flex items-center gap-2 font-medium whitespace-nowrap">
             <span>✋</span>
@@ -84,14 +90,11 @@ function Header() {
           {autenticado ? (
             <>
               <div className="flex items-center gap-2 bg-white/10 px-3 py-2 rounded-full whitespace-nowrap">
-                <span className="text-lg">👋</span>
-                <span className="font-medium">
-                  Hola, {nombreUsuario || 'Usuario'}
-                </span>
+                <span>👋🏻 Hola, {nombreUsuario || 'Usuario'}</span>
               </div>
               <button
                 onClick={handleLogout}
-                className="bg-white text-primary px-5 py-2 rounded-lg font-semibold hover:bg-gray-100 transition shadow-md"
+                className="bg-white text-primary px-4 py-2 rounded-lg font-semibold hover:bg-gray-100 transition shadow-md whitespace-nowrap"
               >
                 Cerrar Sesión
               </button>

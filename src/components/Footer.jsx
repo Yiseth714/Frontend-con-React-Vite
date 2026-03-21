@@ -6,13 +6,13 @@ function Footer() {
   const anioActual = new Date().getFullYear();
 
   return (
-    <footer className="bg-primary text-white text-center py-6 px-4 mt-auto">
-      <div className="max-w-6xl mx-auto">
-        <p className="text-sm mb-2">
-          © {anioActual} SeñaGo - App de Lengua de Señas
+    <footer className="bg-gradient-to-r from-primary to-primary/90 text-white py-6">
+      <div className="max-w-6xl mx-auto px-4 text-center">
+        <p className="text-sm font-medium mb-1">
+          © {anioActual} SeñaGo - Aprende Lenguaje de Señas. 
         </p>
         <p className="text-xs text-white/70">
-          Promoviendo la inclusión y accesibilidad para todos
+          Promoviendo la inclusión y accesibilidad para todos. Todos los derechos reservados
         </p>
       </div>
     </footer>
