@@ -97,6 +97,138 @@ const retosData = {
       },
     ],
   },
+
+    4: {
+    titulo: "Reto 4",
+    respuestasCorrectas: ["A", "B", "C"],
+    lecciones: [
+      {
+        pregunta: "ESCRIBE AQUÍ TU PREGUNTA",
+        opciones: ["Opción 1", "Opción 2", "Opción 3"],
+        imagen: new URL(
+          "../../assets/images/retos/reto4/leccion1.png",
+          import.meta.url
+        ).href,
+      },
+      {
+        pregunta: "ESCRIBE AQUÍ TU PREGUNTA",
+        opciones: ["Opción 1", "Opción 2", "Opción 3"],
+        imagen: new URL(
+          "../../assets/images/retos/reto4/leccion2.png",
+          import.meta.url
+        ).href,
+      },
+      {
+        pregunta: "ESCRIBE AQUÍ TU PREGUNTA",
+        opciones: ["Opción 1", "Opción 2", "Opción 3"],
+        imagen: new URL(
+          "../../assets/images/retos/reto4/leccion3.png",
+          import.meta.url
+        ).href,
+      },
+    ],
+  },
+
+  5: {
+    titulo: "Reto 5",
+    respuestasCorrectas: ["A", "B", "C"],
+    lecciones: [
+      {
+        pregunta: "ESCRIBE AQUÍ TU PREGUNTA",
+        opciones: ["Opción 1", "Opción 2", "Opción 3"],
+        imagen: new URL(
+          "../../assets/images/retos/reto5/leccion1.png",
+          import.meta.url
+        ).href,
+      },
+      {
+        pregunta: "ESCRIBE AQUÍ TU PREGUNTA",
+        opciones: ["Opción 1", "Opción 2", "Opción 3"],
+        imagen: new URL(
+          "../../assets/images/retos/reto5/leccion2.png",
+          import.meta.url
+        ).href,
+      },
+      {
+        pregunta: "ESCRIBE AQUÍ TU PREGUNTA",
+        opciones: ["Opción 1", "Opción 2", "Opción 3"],
+        imagen: new URL(
+          "../../assets/images/retos/reto5/leccion3.png",
+          import.meta.url
+        ).href,
+      },
+    ],
+  },
+
+  6: {
+    titulo: "Reto 6",
+    respuestasCorrectas: ["A", "B", "C"],
+    lecciones: [
+      {
+        pregunta: "ESCRIBE AQUÍ TU PREGUNTA",
+        opciones: ["Opción 1", "Opción 2", "Opción 3"],
+        imagen: new URL(
+          "../../assets/images/retos/reto6/leccion1.png",
+          import.meta.url
+        ).href,
+      },
+      {
+        pregunta: "ESCRIBE AQUÍ TU PREGUNTA",
+        opciones: ["Opción 1", "Opción 2", "Opción 3"],
+        imagen: new URL(
+          "../../assets/images/retos/reto6/leccion2.png",
+          import.meta.url
+        ).href,
+      },
+      {
+        pregunta: "ESCRIBE AQUÍ TU PREGUNTA",
+        opciones: ["Opción 1", "Opción 2", "Opción 3"],
+        imagen: new URL(
+          "../../assets/images/retos/reto6/leccion3.png",
+          import.meta.url
+        ).href,
+      },
+      {
+        pregunta: "ESCRIBE AQUÍ TU PREGUNTA",
+        opciones: ["Opción 1", "Opción 2", "Opción 3"],
+        imagen: new URL(
+          "../../assets/images/retos/reto6/leccion3.png",
+          import.meta.url
+        ).href,
+      },
+    ],
+  },
+
+  7: {
+    titulo: "Reto 7",
+    respuestasCorrectas: ["A", "B", "C"],
+    lecciones: [
+      {
+        pregunta: "ESCRIBE AQUÍ TU PREGUNTA",
+        opciones: ["Opción 1", "Opción 2", "Opción 3"],
+        imagen: new URL(
+          "../../assets/images/retos/reto7/leccion1.png",
+          import.meta.url
+        ).href,
+      },
+      {
+        pregunta: "ESCRIBE AQUÍ TU PREGUNTA",
+        opciones: ["Opción 1", "Opción 2", "Opción 3"],
+        imagen: new URL(
+          "../../assets/images/retos/reto7/leccion2.png",
+          import.meta.url
+        ).href,
+      },
+      {
+        pregunta: "ESCRIBE AQUÍ TU PREGUNTA",
+        opciones: ["Opción 1", "Opción 2", "Opción 3"],
+        imagen: new URL(
+          "../../assets/images/retos/reto7/leccion3.png",
+          import.meta.url
+        ).href,
+      },
+    ],
+  },
 };
 
 export default function Reto() {
