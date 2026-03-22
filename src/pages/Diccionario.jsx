@@ -3,16 +3,16 @@ import { useState } from "react";
 
 // Abecedario
 const letras = [
-  "A","B","C","D","E","F","G",
-  "H","I","J","K","L","M",
-  "N","O","P","Q","R","S",
-  "T","U","V","W","X","Y","Z"
+  "A", "B", "C", "D", "E", "F", "G",
+  "H", "I", "J", "K", "L", "M",
+  "N", "Ñ", "O", "P", "Q", "R", "S",
+  "T", "U", "V", "W", "X", "Y", "Z"
 ];
 
 // Números
-const numeros = ["1","2","3","4","5","6","7","8","9","10",
-                 "11","12","13","14","15","16","17","18","19","20",
-                 "21", "22","23","24","25","26","27","28","29","30"];
+const numeros = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10",
+  "11", "12", "13", "14", "15", "16", "17", "18", "19", "20",
+  "21", "22", "23", "24", "25", "26", "27", "28", "29", "30"];
 
 // Palabras por categorías
 const categoriasPalabras = [
@@ -76,13 +76,14 @@ export default function Diccionario() {
 
   return (
     <div className="p-4 md:p-8">
-        <h2 className="text-3xl font-bold text-primary mb-6">
+
+      <h2 className="text-3xl font-bold text-primary mb-6">
         Diccionario de Lengua de Señas
       </h2>
 
       {/* Botones de sección */}
       <div className="flex gap-4 mb-6 flex-wrap">
-        {["letras","numeros","palabras"].map(sec => (
+        {["letras", "numeros", "palabras"].map(sec => (
           <button
             key={sec}
             onClick={() => {
@@ -190,8 +191,8 @@ export default function Diccionario() {
               activo.tipo === "letra"
                 ? `/src/assets/images/abecedario/${activo.valor}.png.jpeg`
                 : activo.tipo === "numero"
-                ? `/src/assets/images/numeros/${activo.valor}.jpeg`
-                : `/src/assets/images/palabras/${activo.carpeta}/${activo.archivo}`
+                  ? `/src/assets/images/numeros/${activo.valor}.jpeg`
+                  : `/src/assets/images/palabras/${activo.carpeta}/${activo.archivo}`
             }
             alt="Seña"
             className="mx-auto w-48 h-48 object-contain"

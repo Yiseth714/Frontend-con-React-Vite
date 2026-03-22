@@ -37,6 +37,12 @@ export default function Retos() {
 
   return (
     <div className="p-8">
+      <button
+        onClick={() => navigate("/ruta")}
+        className="mb-4 flex items-center gap-2 bg-white border border-gray-200 px-4 py-2 rounded-lg hover:bg-gray-50 transition"
+      >
+        Volver
+      </button>
       <h2 className="text-2xl font-bold text-primary mb-6">
         Retos disponibles
       </h2>
@@ -83,8 +89,8 @@ export default function Retos() {
             onClick={() => navigate("/ruta/retos/4")}
             disabled={!isRetoDesbloqueado(4)}
             className={`block w-full p-4 rounded-lg transition ${isRetoDesbloqueado(4)
-                ? "bg-white hover:bg-gray-50"
-                : "bg-gray-300 cursor-not-allowed"
+              ? "bg-white hover:bg-gray-50"
+              : "bg-gray-300 cursor-not-allowed"
               }`}
           >
             Reto 4 {isRetoDesbloqueado(4) ? "" : "🔒"}
@@ -95,8 +101,8 @@ export default function Retos() {
             onClick={() => navigate("/ruta/retos/5")}
             disabled={!isRetoDesbloqueado(5)}
             className={`block w-full p-4 rounded-lg transition ${isRetoDesbloqueado(5)
-                ? "bg-white hover:bg-gray-50"
-                : "bg-gray-300 cursor-not-allowed"
+              ? "bg-white hover:bg-gray-50"
+              : "bg-gray-300 cursor-not-allowed"
               }`}
           >
             Reto 5 {isRetoDesbloqueado(5) ? "" : "🔒"}
@@ -107,8 +113,8 @@ export default function Retos() {
             onClick={() => navigate("/ruta/retos/6")}
             disabled={!isRetoDesbloqueado(6)}
             className={`block w-full p-4 rounded-lg transition ${isRetoDesbloqueado(6)
-                ? "bg-white hover:bg-gray-50"
-                : "bg-gray-300 cursor-not-allowed"
+              ? "bg-white hover:bg-gray-50"
+              : "bg-gray-300 cursor-not-allowed"
               }`}
           >
             Reto 6 {isRetoDesbloqueado(6) ? "" : "🔒"}
@@ -119,11 +125,47 @@ export default function Retos() {
             onClick={() => navigate("/ruta/retos/7")}
             disabled={!isRetoDesbloqueado(7)}
             className={`block w-full p-4 rounded-lg transition ${isRetoDesbloqueado(7)
-                ? "bg-white hover:bg-gray-50"
-                : "bg-gray-300 cursor-not-allowed"
+              ? "bg-white hover:bg-gray-50"
+              : "bg-gray-300 cursor-not-allowed"
               }`}
           >
             Reto 7 {isRetoDesbloqueado(7) ? "" : "🔒"}
+          </button>
+
+          {/* Reto 8 */}
+          <button
+            onClick={() => navigate("/ruta/retos/8")}
+            disabled={!isRetoDesbloqueado(8)}
+            className={`block w-full p-4 rounded-lg transition ${isRetoDesbloqueado(8)
+              ? "bg-white hover:bg-gray-50"
+              : "bg-gray-300 cursor-not-allowed"
+              }`}
+          >
+            Reto 8 {isRetoDesbloqueado(8) ? "" : "🔒"}
+          </button>
+
+          {/* Reto 9 */}
+          <button
+            onClick={() => navigate("/ruta/retos/9")}
+            disabled={!isRetoDesbloqueado(9)}
+            className={`block w-full p-4 rounded-lg transition ${isRetoDesbloqueado(9)
+              ? "bg-white hover:bg-gray-50"
+              : "bg-gray-300 cursor-not-allowed"
+              }`}
+          >
+            Reto 9 {isRetoDesbloqueado(9) ? "" : "🔒"}
+          </button>
+
+          {/* Reto 10 */}
+          <button
+            onClick={() => navigate("/ruta/retos/10")}
+            disabled={!isRetoDesbloqueado(10)}
+            className={`block w-full p-4 rounded-lg transition ${isRetoDesbloqueado(10)
+              ? "bg-white hover:bg-gray-50"
+              : "bg-gray-300 cursor-not-allowed"
+              }`}
+          >
+            Reto 10 {isRetoDesbloqueado(10) ? "" : "🔒"}
           </button>
 
         </div>
