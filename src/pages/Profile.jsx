@@ -13,7 +13,6 @@ function Profile() {
     const nombreUsuario = obtenerNombreUsuario();
     const [logros, setLogros] = useState([]);
     const [cargando, setCargando] = useState(true);
-    const [error, setError] = useState("");
 
     useEffect(() => {
         const cargarLogros = async () => {
@@ -23,7 +22,7 @@ function Profile() {
                 setLogros(datos.logros || []);
             } catch (err) {
                 console.error("Error al cargar logros:", err);
-                setError("No se pudieron cargar los logros");
+                // Silenciar error - si no hay logros simplemente no se muestran
             } finally {
                 setCargando(false);
             }
@@ -87,10 +86,6 @@ function Profile() {
                     <div className="text-center py-12">
                         <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-primary mx-auto"></div>
                         <p className="mt-4 text-gray-500 text-lg">Cargando logros...</p>
-                    </div>
-                ) : error ? (
-                    <div className="bg-red-100 border border-red-400 text-red-700 px-6 py-4 rounded-xl">
-                        <p className="font-medium">{error}</p>
                     </div>
                 ) : logros.length === 0 ? (
                     <div className="text-center py-12">

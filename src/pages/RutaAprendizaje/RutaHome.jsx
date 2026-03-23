@@ -12,6 +12,37 @@ export default function RutaHome() {
     const cargarProgreso = async () => {
       try {
         const datos = await obtenerProgreso();
+        
+        // Calcular el progreso real basándose en las lecciones completadas
+        if (datos && datos.lecciones_completadas) {
+          const leccionesCompletadas = datos.lecciones_completadas.split(",").filter(l => l.trim() !== "");
+          
+          // Encontrar el reto y lección más altos alcanzados
+          let maxReto = 0;
+          let maxLeccion = 0;
+          
+          leccionesCompletadas.forEach(leccionKey => {
+            const [reto, leccion] = leccionKey.split("-").map(Number);
+            if (reto > maxReto) {
+              maxReto = reto;
+              maxLeccion = leccion;
+            } else if (reto === maxReto && leccion > maxLeccion) {
+              maxLeccion = leccion;
+            }
+          });
+          
+          // Si hay lecciones completadas, actualizar el progreso
+          if (maxReto > 0) {
+            datos.reto_actual = maxReto;
+            // La siguiente lección sería la última completada + 1
+            datos.leccion_actual = maxLeccion >= 3 ? 1 : maxLeccion + 1;
+            // Si completó la lección 3, el siguiente reto
+            if (maxLeccion >= 3) {
+              datos.reto_actual = maxReto + 1;
+            }
+          }
+        }
+        
         setProgreso(datos);
       } catch (error) {
         console.error("Error al cargar progreso:", error);
@@ -30,30 +61,53 @@ export default function RutaHome() {
         </h1>
 
         {cargando ? (
-          <p className="text-gray-600">Cargando tu progreso...</p>
+          <div className="text-center py-8">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto"></div>
+            <p className="mt-4 text-gray-500">Cargando tu progreso...</p>
+          </div>
         ) : progreso ? (
-          <div className="bg-white p-6 rounded-lg shadow-md mb-6 text-center">
-            <p className="text-lg text-gray-700 mb-2">
-              <strong>Reto actual:</strong> {progreso.reto_actual}
-            </p>
-            <p className="text-lg text-gray-700 mb-2">
-              <strong>Lección actual:</strong> {progreso.leccion_actual}
-            </p>
-            {progreso.lecciones_completadas && (
-              <p className="text-sm text-gray-500">
-                Lecciones completadas: {progreso.lecciones_completadas.split(',').length}
-              </p>
-            )}
+          <div className="bg-gradient-to-br from-white to-gray-50 p-8 rounded-2xl shadow-xl border border-gray-100 max-w-md w-full text-center">
+            <div className="mb-6">
+              <div className="text-5xl mb-3">🎯</div>
+              <h3 className="text-xl font-bold text-gray-800">Tu Progreso</h3>
+            </div>
+            
+            <div className="space-y-4">
+              <div className="bg-blue-50 p-4 rounded-xl border border-blue-100">
+                <p className="text-sm text-blue-600 font-medium mb-1">Reto Actual</p>
+                <p className="text-3xl font-bold text-blue-700">
+                  {progreso.reto_actual || 1}
+                </p>
+              </div>
+              
+              <div className="bg-green-50 p-4 rounded-xl border border-green-100">
+                <p className="text-sm text-green-600 font-medium mb-1">Lección Actual</p>
+                <p className="text-3xl font-bold text-green-700">
+                  {progreso.leccion_actual || 1}
+                </p>
+              </div>
+              
+              {progreso.lecciones_completadas && (
+                <div className="mt-4 pt-4 border-t border-gray-100">
+                  <p className="text-sm text-gray-500">
+                    Lecciones completadas: <span className="font-semibold text-gray-700">{progreso.lecciones_completadas.split(',').filter(l => l.trim() !== '').length}</span>
+                  </p>
+                </div>
+              )}
+            </div>
           </div>
         ) : (
-          <p className="text-gray-600 mb-6">
-            ¡Comienza tu aventura en el mundo de la lengua de señas!
-          </p>
+          <div className="text-center py-8 px-6">
+            <div className="text-6xl mb-4">🌟</div>
+            <p className="text-gray-600 mb-6 text-lg">
+              ¡Comienza tu aventura en el mundo de la lengua de señas!
+            </p>
+          </div>
         )}
 
         <button
           onClick={() => navigate("/ruta/retos")}
-          className="bg-accent px-6 py-3 rounded-lg font-semibold hover:bg-opacity-90 transition"
+          className="mt-6 bg-gradient-to-r from-primary to-blue-600 text-white px-8 py-4 rounded-xl font-semibold hover:from-blue-700 hover:to-blue-700 transition-all shadow-lg hover:shadow-xl"
         >
           Ver Retos
         </button>

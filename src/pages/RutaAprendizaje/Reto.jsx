@@ -6,7 +6,7 @@ import { crearLogro, NOMBRES_LOGROS, DESCRIPCIONES_LOGROS } from "../../services
 // CONTENIDO DE CADA RETO
 const retosData = {
   1: {
-    titulo: "Reto 1: LETRAS",
+    titulo: "RETO 1: LETRAS",
     respuestasCorrectas: ["B", "C", "A"],
     lecciones: [
       {
@@ -37,7 +37,7 @@ const retosData = {
   },
 
   2: {
-    titulo: "Reto 2: SALUDO/CORDIALIDAD",
+    titulo: "RETO 2: SALUDO/CORDIALIDAD",
     respuestasCorrectas: ["A", "A", "B"],
     lecciones: [
       {
@@ -68,7 +68,7 @@ const retosData = {
   },
 
   3: {
-    titulo: "Reto 3: COLORES",
+    titulo: "RETO 3: COLORES",
     respuestasCorrectas: ["B", "C", "C"],
     lecciones: [
       {
@@ -99,7 +99,7 @@ const retosData = {
   },
 
   4: {
-    titulo: "Reto 4: FAMILIA",
+    titulo: "RETO 4: FAMILIA",
     respuestasCorrectas: ["A", "C", "B"],
     lecciones: [
       {
@@ -130,7 +130,7 @@ const retosData = {
   },
 
   5: {
-    titulo: "Reto 5: COMIDAS Y BEBIDAS",
+    titulo: "RETO 5: COMIDAS Y BEBIDAS",
     respuestasCorrectas: ["C", "B", "A"],
     lecciones: [
       {
@@ -161,7 +161,7 @@ const retosData = {
   },
 
   6: {
-    titulo: "Reto 6: ROPA",
+    titulo: "RETO 6: ROPA",
     respuestasCorrectas: ["A", "C", "C"],
     lecciones: [
       {
@@ -194,7 +194,7 @@ const retosData = {
   },
 
   7: {
-    titulo: "Reto 7: CASA",
+    titulo: "RETO 7: CASA",
     respuestasCorrectas: ["B", "C", "B"],
     lecciones: [
       {
@@ -227,7 +227,7 @@ const retosData = {
   },
 
   8: {
-    titulo: "Reto 8: COLEGIO",
+    titulo: "RETO 8: COLEGIO",
     respuestasCorrectas: ["C", "A", "A"],
     lecciones: [
       {
@@ -260,7 +260,7 @@ const retosData = {
   },
 
   9: {
-    titulo: "Reto 9: CIUDAD",
+    titulo: "RETO 9: CIUDAD",
     respuestasCorrectas: ["A", "C", "B"],
     lecciones: [
       {
@@ -293,7 +293,7 @@ const retosData = {
   },
 
   10: {
-    titulo: "Reto 10: CALENDARIO",
+    titulo: "RETO 10: CALENDARIO",
     respuestasCorrectas: ["B", "B", "C"],
     lecciones: [
       {
@@ -451,21 +451,26 @@ export default function Reto() {
   };
 
   return (
-    <div className="p-4 md:p-8 space-y-6">
+    <div className="p-4 md:p-8 max-w-2xl mx-auto space-y-6">
 
       {/* BOTÓN VOLVER */}
       <button
         onClick={() => navigate("/ruta/retos")}
-        className="flex items-center gap-2 bg-white border border-gray-200 px-4 py-2 rounded-xl shadow-sm hover:shadow-md hover:bg-gray-50 transition"
+        className="flex items-center gap-2 bg-gradient-to-r from-primary to-blue-600 text-white px-5 py-2.5 rounded-xl hover:from-blue-700 hover:to-blue-800 transition-all shadow-md hover:shadow-lg"
       >
-        
-        <span className="font-medium text-gray-700">Volver a retos</span>
+        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+        </svg>
+        <span className="font-medium">Volver a retos</span>
       </button>
-      <h2 className="text-2xl font-bold text-primary">{reto.titulo}</h2>
+
+      <h2 className="text-3xl font-bold text-primary text-center mb-6">{reto.titulo}</h2>
 
       {reto.lecciones.map((leccion, index) => (
-        <div key={index} className="bg-white p-4 md:p-6 rounded-lg">
-          <h3 className="font-semibold mb-2">Lección {index + 1}</h3>
+        <div key={index} className="bg-white p-4 md:p-6 rounded-xl shadow-md border border-gray-100">
+          <h3 className="font-semibold mb-4 text-lg text-primary flex items-center gap-2">
+            <span className="bg-primary/10 px-3 py-1 rounded-full text-sm">Lección {index + 1}</span>
+          </h3>
 
           {leccion.imagen && (
             <img
@@ -475,24 +480,32 @@ export default function Reto() {
             />
           )}
 
-          <p className="mb-2">{leccion.pregunta}</p>
+          <p className="mb-4 text-gray-700 font-medium">{leccion.pregunta}</p>
 
           {leccion.opciones.map((opcion, opcionIndex) => (
-            <label key={opcionIndex} className="block">
+            <label 
+              key={opcionIndex} 
+              className={`block mb-3 p-3 rounded-lg border-2 cursor-pointer transition-all duration-200 hover:shadow-md ${
+                respuestas[index] === opcionIndex 
+                  ? 'border-primary bg-primary/5 shadow-md' 
+                  : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50'
+              }`}
+            >
               <input
                 type="radio"
                 name={`leccion-${index}`}
                 onChange={() => manejarCambio(index, opcionIndex)}
+                className="mr-3 w-4 h-4 accent-primary"
               />
 
-              {typeof opcion === "string" && opcion.includes("assets/images") ? ( //cambio para lecciones com imagenes en las opciones
+              {typeof opcion === "string" && opcion.includes("assets/images") ? (
                 <img
                   src={opcion}
                   alt="opción"
                   className="h-20 mt-2 object-contain"
                 />
               ) : (
-                <span className="ml-2">{opcion}</span>
+                <span className={`ml-2 font-medium ${respuestas[index] === opcionIndex ? 'text-primary' : 'text-gray-700'}`}>{opcion}</span>
               )}
             </label>
           ))}
@@ -502,13 +515,20 @@ export default function Reto() {
       <button
         onClick={finalizarReto}
         disabled={cargando}
-        className={`bg-primary text-white px-6 py-2 rounded-lg ${cargando ? 'opacity-50 cursor-not-allowed' : ''
-          }`}
+        className={`w-full bg-gradient-to-r from-primary to-blue-600 text-white font-semibold px-6 py-3 rounded-xl hover:from-blue-700 hover:to-blue-800 transition-all shadow-md hover:shadow-lg ${cargando ? 'opacity-50 cursor-not-allowed' : ''}`}
       >
         {cargando ? 'Guardando...' : 'Finalizar reto'}
       </button>
 
-      {resultado && <p className="mt-4 font-semibold">{resultado}</p>}
+      {resultado && (
+        <div className={`mt-6 p-4 rounded-xl text-center font-semibold ${
+          resultado.includes('felicitaciones') || resultado.includes('¡Excelente') || resultado.includes('¡Bien')
+            ? 'bg-green-100 text-green-700 border border-green-300'
+            : 'bg-amber-100 text-amber-700 border border-amber-300'
+        }`}>
+          {resultado}
+        </div>
+      )}
     </div>
   );
 }
