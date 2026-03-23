@@ -1,7 +1,4 @@
 import { useEffect, useRef } from "react";
-import { Hands } from "@mediapipe/hands";
-import { drawConnectors, drawLandmarks } from "@mediapipe/drawing_utils";
-import { HAND_CONNECTIONS } from "@mediapipe/hands";
 
 export default function CameraView({ onLandmarks }) {
   const videoRef = useRef(null);
@@ -10,50 +7,75 @@ export default function CameraView({ onLandmarks }) {
   const handsRef = useRef(null);
 
   useEffect(() => {
-    const hands = new Hands({
-      locateFile: (file) =>
-        `https://cdn.jsdelivr.net/npm/@mediapipe/hands/${file}`,
-    });
+    // Cargar MediaPipe desde CDN
+    const script1 = document.createElement("script");
+    script1.src = "https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js";
 
-    hands.setOptions({
-      maxNumHands: 2,
-      modelComplexity: 0,
-      minDetectionConfidence: 0.7,
-      minTrackingConfidence: 0.5,
-    });
+    const script2 = document.createElement("script");
+    script2.src = "https://cdn.jsdelivr.net/npm/@mediapipe/drawing_utils/drawing_utils.js";
 
-    hands.onResults((results) => {
-      const canvas = canvasRef.current;
-      if (!canvas) return;
-      const ctx = canvas.getContext("2d");
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
+    const script3 = document.createElement("script");
+    script3.src = "https://cdn.jsdelivr.net/npm/@mediapipe/hands/hands.js";
 
-      ctx.save();
-      ctx.scale(-1, 1);
-      ctx.drawImage(results.image, -canvas.width, 0, canvas.width, canvas.height);
-      ctx.restore();
+    document.head.appendChild(script1);
+    document.head.appendChild(script2);
 
-      if (results.multiHandLandmarks?.length > 0) {
-        results.multiHandLandmarks.forEach((landmarks) => {
-          const mirrored = landmarks.map((lm) => ({ ...lm, x: 1 - lm.x }));
-          drawConnectors(ctx, mirrored, HAND_CONNECTIONS, {
-            color: "#00FF88", lineWidth: 2,
+    script3.onload = () => initMediaPipe();
+    document.head.appendChild(script3);
+
+    function initMediaPipe() {
+      const hands = new window.Hands({
+        locateFile: (file) =>
+          `https://cdn.jsdelivr.net/npm/@mediapipe/hands/${file}`,
+      });
+
+      hands.setOptions({
+        maxNumHands: 2,
+        modelComplexity: 0,
+        minDetectionConfidence: 0.7,
+        minTrackingConfidence: 0.5,
+      });
+
+      hands.onResults((results) => {
+        const canvas = canvasRef.current;
+        if (!canvas) return;
+        const ctx = canvas.getContext("2d");
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        // Dibujar video invertido
+        ctx.save();
+        ctx.scale(-1, 1);
+        ctx.drawImage(results.image, -canvas.width, 0, canvas.width, canvas.height);
+        ctx.restore();
+
+        if (results.multiHandLandmarks?.length > 0) {
+          results.multiHandLandmarks.forEach((landmarks) => {
+            const mirrored = landmarks.map((lm) => ({ ...lm, x: 1 - lm.x }));
+
+            // Dibujar con utilidades de MediaPipe desde window
+            window.drawConnectors(ctx, mirrored, window.HAND_CONNECTIONS, {
+              color: "#00FF88",
+              lineWidth: 2,
+            });
+            window.drawLandmarks(ctx, mirrored, {
+              color: "#FF0055",
+              lineWidth: 1,
+              radius: 4,
+            });
           });
-          drawLandmarks(ctx, mirrored, {
-            color: "#FF0055", lineWidth: 1, radius: 4,
-          });
-        });
 
-        const handsData = results.multiHandLandmarks.map((hand) =>
-          hand.map((lm) => ({ x: lm.x, y: lm.y, z: lm.z }))
-        );
-        onLandmarks(handsData);
-      } else {
-        onLandmarks([]);
-      }
-    });
+          const handsData = results.multiHandLandmarks.map((hand) =>
+            hand.map((lm) => ({ x: lm.x, y: lm.y, z: lm.z }))
+          );
+          onLandmarks(handsData);
+        } else {
+          onLandmarks([]);
+        }
+      });
 
-    handsRef.current = hands;
+      handsRef.current = hands;
+      startCamera();
+    }
 
     async function startCamera() {
       try {
@@ -67,6 +89,7 @@ export default function CameraView({ onLandmarks }) {
         });
 
         const video = videoRef.current;
+        if (!video) return;
         video.srcObject = stream;
         video.onloadedmetadata = () => {
           video.play();
@@ -85,14 +108,12 @@ export default function CameraView({ onLandmarks }) {
       animationRef.current = requestAnimationFrame(processFrame);
     }
 
-    startCamera();
-
     return () => {
       if (animationRef.current) cancelAnimationFrame(animationRef.current);
       if (videoRef.current?.srcObject) {
         videoRef.current.srcObject.getTracks().forEach((t) => t.stop());
       }
-      hands.close();
+      if (handsRef.current) handsRef.current.close();
     };
   }, [onLandmarks]);
 
