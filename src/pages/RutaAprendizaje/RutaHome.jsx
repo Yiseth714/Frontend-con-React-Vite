@@ -65,10 +65,10 @@ export default function RutaHome() {
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto"></div>
             <p className="mt-4 text-gray-500">Cargando tu progreso...</p>
           </div>
-        ) : progreso ? (
+        ) : progreso && progreso.lecciones_completadas ? (
           <div className="bg-gradient-to-br from-white to-gray-50 p-8 rounded-2xl shadow-xl border border-gray-100 max-w-md w-full text-center">
             <div className="mb-6">
-              <div className="text-5xl mb-3">🎯</div>
+              <div className="text-5xl mb-3"></div>
               <h3 className="text-xl font-bold text-gray-800">Tu Progreso</h3>
             </div>
             
@@ -98,7 +98,7 @@ export default function RutaHome() {
           </div>
         ) : (
           <div className="text-center py-8 px-6">
-            <div className="text-6xl mb-4">🌟</div>
+            <div className="text-6xl mb-4"></div>
             <p className="text-gray-600 mb-6 text-lg">
               ¡Comienza tu aventura en el mundo de la lengua de señas!
             </p>
