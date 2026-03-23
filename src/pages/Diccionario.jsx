@@ -1,18 +1,18 @@
-
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 // Abecedario
 const letras = [
-  "A","B","C","D","E","F","G",
-  "H","I","J","K","L","M",
-  "N","O","P","Q","R","S",
-  "T","U","V","W","X","Y","Z"
+  "A", "B", "C", "D", "E", "F", "G",
+  "H", "I", "J", "K", "L", "M",
+  "N", "Ñ", "O", "P", "Q", "R", "S",
+  "T", "U", "V", "W", "X", "Y", "Z"
 ];
 
 // Números
-const numeros = ["1","2","3","4","5","6","7","8","9","10",
-                 "11","12","13","14","15","16","17","18","19","20",
-                 "21", "22","23","24","25","26","27","28","29","30"];
+const numeros = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10",
+  "11", "12", "13", "14", "15", "16", "17", "18", "19", "20",
+  "21", "22", "23", "24", "25", "26", "27", "28", "29", "30"];
 
 // Palabras por categorías
 const categoriasPalabras = [
@@ -62,6 +62,7 @@ const categoriasPalabras = [
 ];
 
 export default function Diccionario() {
+  const navigate = useNavigate();
   const [seccion, setSeccion] = useState("letras");
   const [activo, setActivo] = useState(null);
   const [busqueda, setBusqueda] = useState("");
@@ -75,14 +76,25 @@ export default function Diccionario() {
   );
 
   return (
-    <div className="p-4 md:p-8">
-        <h2 className="text-3xl font-bold text-primary mb-6">
+    <div className="p-4 md:p-8 max-w-6xl mx-auto">
+      {/* Botón Volver */}
+      <button
+        onClick={() => navigate("/")}
+        className="flex items-center gap-2 bg-gradient-to-r from-primary to-blue-600 text-white px-5 py-2.5 rounded-xl hover:from-blue-700 hover:to-blue-800 transition-all shadow-md hover:shadow-lg mb-6"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+        </svg>
+        <span className="font-medium">Volver</span>
+      </button>
+
+      <h2 className="text-3xl font-bold text-primary mb-8 text-center">
         Diccionario de Lengua de Señas
       </h2>
 
       {/* Botones de sección */}
-      <div className="flex gap-4 mb-6 flex-wrap">
-        {["letras","numeros","palabras"].map(sec => (
+      <div className="flex gap-3 mb-6 flex-wrap justify-center">
+        {["letras", "numeros", "palabras"].map(sec => (
           <button
             key={sec}
             onClick={() => {
@@ -90,10 +102,10 @@ export default function Diccionario() {
               setActivo(null);
               setBusqueda("");
             }}
-            className={`px-4 py-2 rounded-lg font-semibold transition
+            className={`px-6 py-3 rounded-xl font-semibold transition-all shadow-md
               ${seccion === sec
-                ? "bg-primary text-white"
-                : "bg-white text-primary hover:bg-primary hover:text-white"}
+                ? "bg-gradient-to-r from-primary to-blue-600 text-white"
+                : "bg-white text-gray-700 border-2 border-gray-200 hover:border-primary hover:text-primary"}
             `}
           >
             {sec === "letras" && "Abecedario"}
@@ -104,22 +116,31 @@ export default function Diccionario() {
       </div>
 
       {/* Buscador */}
-      <input
-        type="text"
-        placeholder={`Buscar en ${seccion}...`}
-        value={busqueda}
-        onChange={(e) => setBusqueda(e.target.value)}
-        className="mb-8 w-full max-w-sm p-3 rounded-lg border focus:outline-none focus:ring-2 focus:ring-primary"
-      />
+      <div className="relative mb-8">
+        <input
+          type="text"
+          placeholder={`Buscar en ${seccion}...`}
+          value={busqueda}
+          onChange={(e) => setBusqueda(e.target.value)}
+          className="w-full p-4 rounded-xl border-2 border-gray-200 focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition"
+        />
+        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 absolute right-4 top-1/2 -translate-y-1/2 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+        </svg>
+      </div>
 
       {/* ABECEDARIO */}
       {seccion === "letras" && (
-        <div className="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 gap-4 mb-8">
+        <div className="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-9 gap-3 mb-8">
           {letrasFiltradas.map(letra => (
             <button
               key={letra}
               onClick={() => setActivo({ tipo: "letra", valor: letra })}
-              className="p-3 bg-white rounded-lg font-bold text-primary hover:bg-primary hover:text-white transition"
+              className={`p-4 rounded-xl font-bold text-lg transition-all shadow-md hover:shadow-lg
+                ${activo?.tipo === "letra" && activo?.valor === letra
+                  ? "bg-primary text-white"
+                  : "bg-white text-gray-700 hover:bg-primary hover:text-white border border-gray-200"}
+              `}
             >
               {letra}
             </button>
@@ -129,12 +150,16 @@ export default function Diccionario() {
 
       {/* NÚMEROS */}
       {seccion === "numeros" && (
-        <div className="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 gap-4 mb-8">
+        <div className="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-10 gap-3 mb-8">
           {numerosFiltrados.map(num => (
             <button
               key={num}
               onClick={() => setActivo({ tipo: "numero", valor: num })}
-              className="p-3 bg-white rounded-lg font-bold text-primary hover:bg-primary hover:text-white transition"
+              className={`p-4 rounded-xl font-bold text-lg transition-all shadow-md hover:shadow-lg
+                ${activo?.tipo === "numero" && activo?.valor === num
+                  ? "bg-primary text-white"
+                  : "bg-white text-gray-700 hover:bg-primary hover:text-white border border-gray-200"}
+              `}
             >
               {num}
             </button>
@@ -151,12 +176,12 @@ export default function Diccionario() {
         if (!itemsFiltrados.length) return null;
 
         return (
-          <div key={cat.titulo} className="mb-8">
-            <h3 className="text-xl font-bold text-primary mb-4">
+          <div key={cat.titulo} className="mb-10">
+            <h3 className="text-xl font-bold text-gray-800 mb-4 pb-2 border-b-2 border-gray-200">
               {cat.titulo}
             </h3>
 
-            <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-4">
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3">
               {itemsFiltrados.map(item => (
                 <button
                   key={item.texto}
@@ -168,7 +193,11 @@ export default function Diccionario() {
                       archivo: item.archivo
                     })
                   }
-                  className="p-3 bg-white rounded-lg text-primary text-sm hover:bg-primary hover:text-white transition"
+                  className={`p-4 rounded-xl text-base font-medium transition-all shadow-md hover:shadow-lg
+                    ${activo?.tipo === "palabra" && activo?.texto === item.texto
+                      ? "bg-primary text-white"
+                      : "bg-white text-gray-700 hover:bg-primary hover:text-white border border-gray-200"}
+                  `}
                 >
                   {item.texto}
                 </button>
@@ -180,28 +209,42 @@ export default function Diccionario() {
 
       {/* VISOR */}
       {activo && (
-        <div className="bg-white p-6 rounded-lg text-center max-w-md mx-auto animate-fadeIn">
-          <h3 className="text-xl font-semibold mb-4">
-            {activo.texto || activo.valor}
-          </h3>
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50" onClick={() => setActivo(null)}>
+          <div className="bg-white rounded-2xl p-8 max-w-lg w-full shadow-2xl" onClick={e => e.stopPropagation()}>
+            <div className="flex justify-between items-center mb-6">
+              <h3 className="text-2xl font-bold text-gray-800">
+                {activo.texto || activo.valor}
+              </h3>
+              <button
+                onClick={() => setActivo(null)}
+                className="text-gray-400 hover:text-gray-600 transition"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
 
-          <img
-            src={
-              activo.tipo === "letra"
-                ? `/src/assets/images/abecedario/${activo.valor}.png.jpeg`
-                : activo.tipo === "numero"
-                ? `/src/assets/images/numeros/${activo.valor}.jpeg`
-                : `/src/assets/images/palabras/${activo.carpeta}/${activo.archivo}`
-            }
-            alt="Seña"
-            className="mx-auto w-48 h-48 object-contain"
-          />
+            <div className="flex justify-center mb-6">
+              <img
+                src={
+                  activo.tipo === "letra"
+                    ? `/src/assets/images/abecedario/${activo.valor}.png.jpeg`
+                    : activo.tipo === "numero"
+                      ? `/src/assets/images/numeros/${activo.valor}.jpeg`
+                      : `/src/assets/images/palabras/${activo.carpeta}/${activo.archivo}`
+                }
+                alt="Seña"
+                className="w-64 h-64 object-contain rounded-xl bg-gray-50"
+              />
+            </div>
+
+            <p className="text-center text-gray-500 text-sm">
+              Toca fuera para cerrar
+            </p>
+          </div>
         </div>
       )}
     </div>
   );
 }
-
-
-
-

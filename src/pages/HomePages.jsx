@@ -9,7 +9,7 @@ function HomePages() {
     <div className="flex flex-col items-center justify-center px-6 py-16 min-h-[calc(100vh-200px)]">
 
         <h1 className="text-3xl md:text-4xl font-bold text-primary text-center mb-8">
-          Bienvenid@ a SeñaGo 👋
+          Bienvenido(a) a SeñaGo 👋
         </h1>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 w-full max-w-6xl">
