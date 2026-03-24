@@ -33,6 +33,7 @@ const categoriasPalabras = [
       { texto: "Cuidado", archivo: "cuidado.png.png" }
     ]
   },
+  
   {
     titulo: "Comidas y bebidas",
     carpeta: "comidas-bebidas",
