@@ -10,7 +10,7 @@ export default defineConfig({
   ],
   server: {
     port: 5173,
-    host: '0.0.0.0',  // Acepta conexiones externas (el celular)
+    host: '192.168.1.13',  // Acepta conexiones externas (el celular)
     https: true,
   },
 })
