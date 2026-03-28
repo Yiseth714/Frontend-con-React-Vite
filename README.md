@@ -686,3 +686,32 @@ Tu frontend tiene una **estructura funcional y bien organizada**:
 **Nivel de madurez:** 4/5 ⭐
 
 Las mejoras sugeridas son opcionales y dependerán del crecimiento del proyecto.
+
+## Revisión de compatibilidad del traductor con dispositivos moviles
+
+README HTTPS local con Vite y mkcert
+
+Resumen
+Este proyecto usa Vite (rolldown-vite) con React y levanta el servidor de desarrollo en HTTPS.
+La configuracion esta en Frontend-con-React-Vite\vite.config.js con server.https: true y el plugin @vitejs/plugin-basic-ssl.
+
+Como funciona mkcert
+mkcert es una herramienta externa para generar certificados TLS de desarrollo confiables en tu maquina local.
+Flujo tipico:
+- Crea una Autoridad Certificadora (CA) local y la instala en el almacén de confianza del sistema.
+- Genera un certificado y una clave para dominios como localhost o una IP local.
+- Esos archivos se usan por el servidor de desarrollo (por ejemplo Vite) para servir HTTPS sin advertencias del navegador.
+En este proyecto no hay certificados versionados en el repositorio; si usas mkcert, los archivos quedan en el perfil del usuario.
+
+Librerias usadas para el puente HTTPS
+- Vite (rolldown-vite@7.2.2): servidor dev que expone HTTP/HTTPS.
+- @vitejs/plugin-basic-ssl: crea o administra un certificado de desarrollo y habilita HTTPS en Vite.
+- Node.js https (interno de Vite): se encarga de servir el contenido con TLS.
+
+Archivos y carpetas creadas o usadas
+- Frontend-con-React-Vite\vite.config.js: configuracion de servidor HTTPS.
+- Frontend-con-React-Vite\node_modules\.vite\basic-ssl\_cert.pem: certificado generado en runtime por el plugin basic-ssl.
+- (Opcional, si se ejecuta mkcert) Archivos de CA y certificados en el perfil del usuario; no se guardan en el repositorio.
+
+.env.development 
+Le dice a React vite en que URL está funcionando el backend
