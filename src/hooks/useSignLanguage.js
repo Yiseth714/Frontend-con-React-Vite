@@ -1,6 +1,6 @@
 import { useRef, useState, useEffect, useCallback } from "react";
 
-const WS_URL = import.meta.env.VITE_WS_URL || "wss://192.168.1.13:8000/api/v1/traductor/ws";
+const WS_URL = import.meta.env.VITE_WS_URL || "wss://192.168.1.62:8000/api/v1/traductor/ws";
 
 export function useSignLanguage() {
   const wsRef = useRef(null);
