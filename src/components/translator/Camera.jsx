@@ -118,7 +118,7 @@ export default function CameraView({ onLandmarks }) {
   }, [onLandmarks]);
 
   return (
-    <div className="relative w-full max-w-lg mx-auto">
+    <div className="relative w-full h-full">
       <video
         ref={videoRef}
         style={{ display: "none" }}
