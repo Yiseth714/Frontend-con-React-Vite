@@ -10,7 +10,7 @@ export function useSignLanguage() {
   const [currentWord, setCurrentWord] = useState("");
   const [confidence, setConfidence] = useState(0);
   const [history, setHistory] = useState([]);
-  const [status, setStatus] = useState("waiting");
+ // const [status, setStatus] = useState("waiting");
   const lastWordRef = useRef("");
 
   const speakWord = useCallback((word) => {
@@ -43,7 +43,7 @@ export function useSignLanguage() {
         if (data.type === "prediction") {
           setCurrentWord(data.word);
           setConfidence(data.confidence);
-          setStatus("idle");
+       //   setStatus("idle");
 
           if (data.word !== lastWordRef.current) {
             lastWordRef.current = data.word;
@@ -54,12 +54,13 @@ export function useSignLanguage() {
             speakWord(data.word);  // ← ahora sí está declarada antes
           }
 
-        } else if (data.type === "capturing") {
-          setStatus("capturing");
+        } 
+        // else if (data.type === "capturing") {
+        //   setStatus("capturing");
 
-        } else if (data.type === "waiting") {
-          setStatus("waiting");
-        }
+        // } else if (data.type === "waiting") {
+        //   setStatus("waiting");
+        // }
       };
     };
 
@@ -73,6 +74,9 @@ export function useSignLanguage() {
     }
   }, []);
 
+  const clearHistory = useCallback(() => {
+    setHistory([]);
+  }, []);
 
-  return { connected, currentWord, confidence, history, status, sendLandmarks };
+  return { connected, currentWord, confidence, history, status, sendLandmarks, clearHistory };
 }

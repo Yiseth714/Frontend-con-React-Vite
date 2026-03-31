@@ -1,4 +1,4 @@
-import { useCallback } from "react";
+import { useCallback, useState } from "react";
 import CameraView from "../components/translator/Camera";
 import { useSignLanguage } from "../hooks/useSignLanguage";
 
@@ -8,12 +8,17 @@ export default function Traductor() {
     currentWord,
     confidence,
     history,
-    status,
     sendLandmarks,
+    clearHistory,
   } = useSignLanguage();
+  const [cameraActive, setCameraActive] = useState(true);
+  const [handDetected, setHandDetected] = useState(false);
 
   const handleLandmarks = useCallback(
-    (landmarks) => sendLandmarks(landmarks),
+    (landmarks) => {
+      setHandDetected(landmarks.length > 0);
+      sendLandmarks(landmarks);
+    },
     [sendLandmarks]
   );
 
@@ -34,25 +39,36 @@ export default function Traductor() {
 
         {/* Cámara */}
         <div className="w-full md:w-auto md:flex-shrink-0">
-          <CameraView onLandmarks={handleLandmarks} />
+          <div className={`border-4 rounded-3xl overflow-hidden bg-black shadow-xl aspect-[4/3] ${handDetected ? 'border-yellow-400 shadow-green-200/30' : 'border-blue-400 shadow-blue-200/30'}`}>
+            {cameraActive ? (
+              <CameraView onLandmarks={handleLandmarks} />
+            ) : (
+              <div className="flex h-full w-full items-center justify-center px-6 text-center text-sm text-gray-300">
+                Cámara desactivada. Pulsa el botón para activarla.
+              </div>
+            )}
+          </div>
 
-          {/* Estado debajo de la cámara */}
-          <div className="mt-2 text-center text-sm font-medium min-h-6">
-            {status === "waiting" && (
-              <span className="text-gray-400">
-                Muestra tu mano a la cámara
-              </span>
-            )}
-            {status === "capturing" && (
-              <span className="text-blue-500 animate-pulse">
-                Capturando seña... retira la mano cuando termines
-              </span>
-            )}
-            {status === "idle" && (
-              <span className="text-green-500">
-                Listo para la siguiente seña
-              </span>
-            )}
+          <div className="mt-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+            <button
+              type="button"
+              onClick={() => {
+                setCameraActive((prev) => {
+                  if (prev) setHandDetected(false);
+                  return !prev;
+                });
+              }}
+              className="inline-flex items-center justify-center rounded-lg border border-yellow-400 bg-yellow-400 px-4 py-2 text-sm font-semibold text-gray-900 transition hover:bg-yellow-500"
+            >
+              {cameraActive ? "Desactivar cámara" : "Activar cámara"}
+            </button>
+            <button
+              type="button"
+              onClick={clearHistory}
+              className="inline-flex items-center justify-center rounded-lg border border-gray-200 bg-white px-4 py-2 text-sm font-semibold text-primary transition hover:bg-white/10"
+            >
+              Limpiar historial
+            </button>
           </div>
         </div>
 
@@ -60,8 +76,11 @@ export default function Traductor() {
         <div className="flex-1 flex flex-col gap-4">
 
           {/* Palabra traducida */}
-          <div className="border-2 border-gray-200 rounded-2xl p-6 text-center min-h-32 flex flex-col items-center justify-center">
-            <span className="text-6xl md:text-7xl font-bold">
+          <div
+            className="rounded-2xl p-7 text-center min-h-40 md:min-h-44 flex flex-col items-center justify-center"
+            style={{ backgroundColor: "#F4F6F7", border: "1px solid #B1C2DA" }}
+          >
+            <span className="text-5xl md:text-6xl font-bold">
               {currentWord || "—"}
             </span>
             {currentWord && (
