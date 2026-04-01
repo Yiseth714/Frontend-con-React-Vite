@@ -1,7 +1,7 @@
 import { driver } from "driver.js";
 import "driver.js/dist/driver.css";
 
-// 👇 instancia global (FUERA de la función)
+// 👇 instancia global
 const driverObj = driver({
   animate: true,
   opacity: 0.6,
@@ -15,7 +15,6 @@ const driverObj = driver({
 });
 
 export const tourHome = () => {
-  // 👇 MUY IMPORTANTE: limpiar cualquier tour anterior
   driverObj.destroy();
 
   driverObj.setSteps([
@@ -39,7 +38,7 @@ export const tourHome = () => {
       element: "#card-ruta",
       popover: {
         title: "Ruta de aprendizaje 🧠",
-        description: "Aprende paso a paso desde lo básico hasta niveles más avanzados",
+        description: "Implementa tus conocimientos adquiridos en el diccionario con nuestra ruta de aprendizaje",
         side: "bottom",
       },
     },
@@ -48,6 +47,54 @@ export const tourHome = () => {
       popover: {
         title: "Traductor en tiempo real 🎥",
         description: "Usa tu cámara para interpretar señas al instante",
+        side: "bottom",
+      },
+    },
+  ]);
+
+  driverObj.drive();
+};
+
+// NUEVO TOUR DICCIONARIO
+export const tourDiccionario = () => {
+  driverObj.destroy();
+
+  driverObj.setSteps([
+    {
+      element: "#secciones-diccionario",
+      popover: {
+        title: "Secciones 📚",
+        description:
+          "Aquí puedes cambiar entre abecedario, números y palabras. Cada sección te muestra diferentes tipos de señas.",
+        side: "bottom",
+      },
+    },
+    {
+      element: "#letra-ejemplo",
+      popover: {
+        title: "Selecciona una letra 🔤",
+        description:
+          "Haz clic en cualquier letra para ver cómo se representa en lengua de señas.",
+        side: "bottom",
+      },
+    },
+  ]);
+
+  driverObj.drive();
+};
+
+// NUEVO TOUR RETOS
+
+export const tourRetos = () => {
+  driverObj.destroy();
+
+  driverObj.setSteps([
+    {
+      element: "#reto-1",
+      popover: {
+        title: "Primer reto 📚",
+        description:
+          "Completa las 3 lecciones de este reto para desbloquear el siguiente. ¡Así avanzas en tu aprendizaje!",
         side: "bottom",
       },
     },

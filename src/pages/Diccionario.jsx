@@ -1,5 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useEffect, useRef } from "react";
+import { tourDiccionario } from "../utils/tour";
 
 // Abecedario
 const letras = [
@@ -67,6 +69,24 @@ export default function Diccionario() {
   const [activo, setActivo] = useState(null);
   const [busqueda, setBusqueda] = useState("");
 
+
+  const tourIniciado = useRef(false);
+
+  useEffect(() => {
+    if (tourIniciado.current) return;
+
+    tourIniciado.current = true;
+
+    const yaVioTour = localStorage.getItem("tourDiccionarioVisto");
+
+    if (!yaVioTour) {
+      setTimeout(() => {
+        tourDiccionario();
+        localStorage.setItem("tourDiccionarioVisto", "true");
+      }, 300);
+    }
+  }, []);
+
   const letrasFiltradas = letras.filter(l =>
     l.toLowerCase().includes(busqueda.toLowerCase())
   );
@@ -92,8 +112,24 @@ export default function Diccionario() {
         Diccionario de Lengua de Señas
       </h2>
 
+       {/* BOTÓN TOUR */}
+      <div className="flex justify-center">
+        <button
+          onClick={() => {
+            localStorage.removeItem("tourDiccionarioVisto");
+            tourDiccionario();
+          }}
+          className="mb-6 px-4 py-2 bg-primary text-white rounded-lg shadow hover:scale-105 transition"
+        >
+          Ver guía otra vez ✨
+        </button>
+      </div>
+
       {/* Botones de sección */}
-      <div className="flex gap-3 mb-6 flex-wrap justify-center">
+      <div
+        id="secciones-diccionario"
+        className="flex gap-3 mb-6 flex-wrap justify-center"
+      >
         {["letras", "numeros", "palabras"].map(sec => (
           <button
             key={sec}
@@ -132,8 +168,9 @@ export default function Diccionario() {
       {/* ABECEDARIO */}
       {seccion === "letras" && (
         <div className="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-9 gap-3 mb-8">
-          {letrasFiltradas.map(letra => (
+          {letrasFiltradas.map((letra, index) => (
             <button
+              id={index === 0 ? "letra-ejemplo" : undefined}
               key={letra}
               onClick={() => setActivo({ tipo: "letra", valor: letra })}
               className={`p-4 rounded-xl font-bold text-lg transition-all shadow-md hover:shadow-lg

@@ -1,13 +1,16 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef} from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { obtenerProgreso } from "../../services/progreso";
 import { estaLeccionCompletada } from "../../services/progreso";
+import { tourRetos } from "../../utils/tour";
 
 export default function Retos() {
   const navigate = useNavigate();
   const location = useLocation();
   const [progreso, setProgreso] = useState(null);
   const [cargando, setCargando] = useState(true);
+
+  const tourIniciado = useRef(false);
 
   useEffect(() => {
     const cargarProgreso = async () => {
@@ -22,6 +25,22 @@ export default function Retos() {
     };
     cargarProgreso();
   }, [location.pathname]);
+
+  // 🔥 TOUR
+  useEffect(() => {
+    if (tourIniciado.current) return;
+
+    tourIniciado.current = true;
+
+    const yaVioTour = localStorage.getItem("tourRetosVisto");
+
+    if (!yaVioTour) {
+      setTimeout(() => {
+        tourRetos();
+        localStorage.setItem("tourRetosVisto", "true");
+      }, 300);
+    }
+  }, []);
 
   // Verificar si un reto está disponible
   const isRetoDesbloqueado = (numeroReto) => {
@@ -52,6 +71,19 @@ export default function Retos() {
         SECCIÓN DE RETOS
       </h2>
 
+       {/* BOTÓN TOUR */}
+      <div className="flex justify-center">
+        <button
+          onClick={() => {
+            localStorage.removeItem("tourRetosVisto");
+            tourRetos();
+          }}
+          className="mb-8 px-4 py-2 bg-primary text-white rounded-lg shadow hover:scale-105 transition"
+        >
+          Ver guía otra vez ✨
+        </button>
+      </div>
+
       {cargando ? (
         <p className="text-gray-600">Cargando...</p>
       ) : (
@@ -59,6 +91,7 @@ export default function Retos() {
 
           {/* Reto 1 */}
           <button
+            id="reto-1"
             onClick={() => navigate("/ruta/retos/1")}
             className="block w-full bg-gradient-to-r from-blue-50 to-indigo-50 border-2 border-blue-200 p-5 rounded-xl hover:from-blue-100 hover:to-indigo-100 hover:shadow-lg transition-all text-left"
           >
