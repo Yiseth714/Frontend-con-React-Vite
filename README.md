@@ -1,717 +1,617 @@
-# Documentación Técnica - Frontend SeñaGo (React Vite)
+# SeñaGo - Frontend
 
-## 1. Estructura Real del Proyecto
+Aplicación web para el aprendizaje de la Lengua de Señas Colombiana (LSC), desarrollada con React y Vite.
+
+## 📌 Descripción
+
+**SeñaGo** es una plataforma educativa diseñada para enseñar la Lengua de Señas Colombiana (LSC) de manera interactiva y accesible. El proyecto utiliza tecnologías modernas de visión por computadora y machine learning para proporcionar una experiencia de aprendizaje inmersiva.
+
+### Características Principales
+
+- 📖 **Diccionario visual** de señas (alfabeto, números, palabras comunes)
+- ✋ **Traductor en tiempo real** con detección de manos y machine learning
+- 🎯 **Ruta de aprendizaje** estructurada con retos y lecciones
+- 🏆 **Sistema de logros** para motivar el aprendizaje
+- ⚙️ **Panel de administración** para gestionar usuarios
+
+Este es el repositorio del **Frontend**, desarrollado con React y Vite.
+
+---
+
+## 🚀 Tecnologías Principales
+
+| Tecnología | Propósito |
+|------------|-----------|
+| **React 19** | Biblioteca de interfaz de usuario |
+| **Vite** | Build tool y servidor de desarrollo rápido |
+| **TailwindCSS** | Framework de estilos utilitarios |
+| **React Router** | Navegación entre páginas SPA |
+| **MediaPipe Hands** | Detección de manos en tiempo real |
+| **WebSocket** | Comunicación bidireccional en tiempo real |
+| **Driver.js** | Tutoriales guiados paso a paso |
+| **SpeechSynthesis API** | Síntesis de voz para pronunciar palabras |
+
+### Dependencias Adicionales
+
+```json
+{
+  "dependencies": {
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "react-router-dom": "^7.1.0",
+    "@mediapipe/hands": "^0.4.1675469240",
+    "driver.js": "^1.0.0",
+    "tailwindcss": "^3.4.0"
+  },
+  "devDependencies": {
+    "vite": "^6.0.0",
+    "@vitejs/plugin-react": "^4.3.0",
+    "eslint": "^9.17.0"
+  }
+}
+```
+
+---
+
+## 📁 Estructura del Proyecto
 
 ```
 Frontend-con-React-Vite/
-├── public/                      # Archivos estáticos públicos
-│   └── vite.svg                # Logo de Vite
-├── src/                        # Código fuente principal
-│   ├── api/                    # Cliente HTTP y servicios de API
-│   │   ├── client.js          # Cliente HTTP centralizado (fetch)
-│   │   ├── auth.js            # Endpoints de autenticación
-│   │   ├── progreso.js        # Endpoints de progreso
-│   │   ├── logros.js          # Endpoints de logros
-│   │   └── admin.js           # Endpoints de administración
-│   ├── services/              # Re-exports para compatibilidad
-│   │   ├── auth.js            # → Re-exporta de api/auth
-│   │   ├── progreso.js        # → Re-exporta de api/progreso
-│   │   ├── logros.js         # → Re-exporta de api/logros
-│   │   └── admin.js           # → Re-exporta de api/admin
-│   ├── components/            # Componentes globales
-│   │   ├── Layout.jsx         # Wrapper con Header + Footer
-│   │   ├── Header.jsx         # Navegación principal
-│   │   ├── Footer.jsx        # Pie de página
-│   │   ├── ProtectedRoute.jsx # Ruta protegida
-│   │   ├── Contador.jsx      # Componente contador
-│   │   ├── Navigation.jsx     # Componente de navegación
-│   │   ├── home/              # Componentes de home
-│   │   │   └── Posts.jsx
-│   │   └── (otros componentes)
-│   ├── pages/                 # Pantallas completas
-│   │   ├── Login.jsx          # Página de inicio de sesión
-│   │   ├── Registro.jsx       # Página de registro
-│   │   ├── HomePages.jsx      # Página principal (home)
-│   │   ├── Diccionario.jsx    # Diccionario de señas
-│   │   ├── Traductor.jsx      # Traductor en tiempo real
-│   │   ├── Profile.jsx        # Perfil del usuario
-│   │   ├── Admin.jsx          # Wrapper (redirige a admin/)
-│   │   ├── index.js           # Exports de páginas
-│   │   ├── admin/             # Panel de administración
-│   │   │   ├── index.jsx      # Componente principal del admin
-│   │   │   ├── components/    # Componentes del admin
-│   │   │   │   ├── Estadisticas.jsx    # Tarjetas de estadísticas
-│   │   │   │   ├── TablaUsuarios.jsx   # Tabla de usuarios
-│   │   │   │   ├── ModalDetalle.jsx    # Modal ver detalles
-│   │   │   │   ├── ModalEditar.jsx     # Modal editar usuario
-│   │   │   │   └── UsuarioBadge.jsx    # Badges (tipo, discapacidad)
-│   │   │   ├── hooks/         # Hooks específicos del admin
-│   │   │   │   └── useAdmin.js         # Lógica de negocio del admin
-│   │   │   └── utils/        # Utilidades del admin
-│   │   │       └── dateUtils.js         # Funciones de fechas
-│   │   └── RutaAprendizaje/   # Módulo de aprendizaje
-│   │       ├── RutaHome.jsx   # Home de ruta
-│   │       ├── Retos.jsx      # Lista de retos
-│   │       └── Reto.jsx       # Una lección de reto
-│   ├── hooks/                 # Hooks globales
-│   │   └── usePosts.js        # Hook para posts
-│   ├── assets/                # Recursos estáticos
-│   │   ├── react.svg         # Logo de React
-│   │   └── images/            # Imágenes
-│   │       ├── Diccionario.png
-│   │       ├── Ruta.png / Ruta.jpeg
-│   │       ├── Traductor.png
-│   │       ├── abecedario/    # Imágenes A-Z
-│   │       ├── numeros/       # Imágenes 1-30
-│   │       ├── palabras/      # Palabras por categorías
+├── public/
+│   └── vite.svg                    # Logo de Vite
+├── src/
+│   ├── api/
+│   │   ├── client.js               # Cliente HTTP centralizado con axios
+│   │   ├── auth.js                 # Endpoints de autenticación
+│   │   ├── progreso.js             # Endpoints de progreso
+│   │   ├── logros.js               # Endpoints de logros
+│   │   └── admin.js                # Endpoints de administración
+│   ├── assets/
+│   │   └── images/
+│   │       ├── abecedario/         # Señas A-Z (imágenes)
+│   │       ├── numeros/            # Señas 1-30 (imágenes)
+│   │       ├── palabras/           # Palabras por categoría
+│   │       │   ├── saludos-cortesia/
 │   │       │   ├── comidas-bebidas/
-│   │       │   ├── cuerpo/
-│   │       │   └── saludos-cortesia/
-│   │       └── retos/         # Imágenes de retos
-│   │           ├── reto1/
-│   │           ├── reto2/
-│   │           └── reto3/
-│   ├── router.jsx             # Configuración de rutas
-│   ├── App.jsx               # Componente raíz
-│   ├── main.jsx              # Punto de entrada
-│   └── style.css            # Estilos globales (Tailwind)
-├── index.html                # HTML principal
-├── package.json             # Dependencias
-├── vite.config.js           # Configuración de Vite
-├── tailwind.config.js       # Configuración de Tailwind
-├── postcss.config.js        # Configuración de PostCSS
-└── eslint.config.js         # Configuración de ESLint
+│   │       │   └── cuerpo/
+│   │       └── retos/              # Imágenes de retos
+│   ├── components/
+│   │   ├── Header.jsx              # Navegación principal
+│   │   ├── Footer.jsx              # Pie de página
+│   │   ├── Layout.jsx              # Diseño principal
+│   │   ├── ProtectedRoute.jsx      # Ruta protegida
+│   │   ├── contador.jsx            # Contador simple
+│   │   ├── navigation.jsx          # Navegación
+│   │   └── home/
+│   │       └── Posts.jsx           # Componente de posts
+│   ├── hooks/
+│   │   └── useSignLanguage.js      # WebSocket del traductor
+│   ├── pages/
+│   │   ├── Login.jsx               # Inicio de sesión
+│   │   ├── Registro.jsx            # Registro de usuario
+│   │   ├── HomePages.jsx           # Página principal
+│   │   ├── Diccionario.jsx         # Diccionario de señas
+│   │   ├── Traductor.jsx            # Traductor en tiempo real
+│   │   ├── Profile.jsx             # Perfil del usuario
+│   │   ├── admin/
+│   │   │   └── index.jsx           # Panel de administración
+│   │   └── RutaAprendizaje/
+│   │       ├── RutaHome.jsx        # Ruta de aprendizaje
+│   │       ├── Retos.jsx           # Lista de retos
+│   │       └── Reto.jsx            # Detalle de un reto
+│   ├── services/
+│   │   └── posts.js                # Servicios de posts
+│   ├── utils/
+│   │   └── tour.js                 # Tutorial guiado (Driver.js)
+│   ├── router.jsx                 # Configuración de rutas
+│   ├── App.jsx                    # Componente raíz
+│   ├── main.jsx                   # Punto de entrada
+│   └── style.css                  # Estilos globales
+├── .env                            # Variables de entorno (producción)
+├── .env.development                # Variables de desarrollo
+├── package.json                    # Dependencias npm
+├── vite.config.js                  # Configuración de Vite
+├── tailwind.config.js              # Configuración de Tailwind
+└── postcss.config.js               # Configuración de PostCSS
 ```
 
 ---
 
-## 2. Explicación de Cada Carpeta
+## 🔧 Requisitos Previos
 
-### 2.1 `src/api/` - Cliente HTTP y Servicios
+| Requisito | Versión Mínima | Notas |
+|-----------|----------------|-------|
+| **Node.js** | 18+ | Se recomienda LTS |
+| **npm** | 9+ | Incluido con Node.js |
+| **Navegador moderno** | Chrome/Firefox/Edge/Safari | Ver compatibilidad abajo |
 
-**Propósito:** Centralizar la comunicación con el backend FastAPI.
+### Navegadores Compatibles
 
-**Archivos:**
+| Navegador | Versión Mínima | WebSocket | MediaPipe | Camera API |
+|----------|----------------|-----------|-----------|------------|
+| **Chrome** | 80+ | ✅ | ✅ | ✅ |
+| **Firefox** | 75+ | ✅ | ✅ | ✅ |
+| **Edge** | 80+ | ✅ | ✅ | ✅ |
+| **Safari** | 14.1+ | ✅ | ✅ | ✅ |
 
-| Archivo | Descripción |
-|---------|-------------|
-| `client.js` | Cliente HTTP base con fetch. Maneja tokens, headers, errores. |
-| `auth.js` | Endpoints: login, registro, perfil, cerrar sesión. |
-| `progreso.js` | Endpoints: crear/obtener/actualizar progreso, marcar lección completada. |
-| `logros.js` | Endpoints: obtener logros, crear logros, constantes de logros. |
-| `admin.js` | Endpoints: usuarios, estadísticas, eliminar, cambiar tipo, actualizar. |
-
-**Responsabilidad:**
-- Realizar peticiones HTTP al backend
-- Manejar tokens de autenticación (Bearer token)
-- Procesar respuestas y lanzar errores
-
-**Ejemplo de código (client.js):**
-
-```javascript
-// URL base del backend
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
-const API_PREFIX = import.meta.env.VITE_API_PREFIX || '/api/v1';
-const BASE_URL = `${API_BASE_URL}${API_PREFIX}`;
-
-// Headers con token
-function getAuthHeaders() {
-    const headers = { 'Content-Type': 'application/json' };
-    const token = localStorage.getItem('token');
-    if (token) {
-        headers['Authorization'] = `Bearer ${token}`;
-    }
-    return headers;
-}
-
-// Peticiones GET, POST, PUT, DELETE
-export async function get(endpoint, authenticated = false) {
-    const headers = authenticated ? getAuthHeaders() : { 'Content-Type': 'application/json' };
-    const response = await fetch(`${BASE_URL}${endpoint}`, { method: 'GET', headers });
-    if (!response.ok) throw new Error(`Error ${response.status}`);
-    return response.json();
-}
-```
-
-**Ejemplo de uso (auth.js):**
-
-```javascript
-import { get, post } from './client';
-
-export async function iniciarSesion(nombre_usuario, contrasena) {
-    const data = await post('/auth/login', { nombre_usuario, contrasena }, false);
-    localStorage.setItem('token', data.token_acceso);
-    localStorage.setItem('nombre_usuario', nombre_usuario);
-    localStorage.setItem('tipo_usuario', data.tipo_usuario);
-    return data;
-}
-
-export function cerrarSesion() {
-    localStorage.removeItem('token');
-    localStorage.removeItem('nombre_usuario');
-    localStorage.removeItem('tipo_usuario');
-}
-
-export function esAdministrador() {
-    return localStorage.getItem('tipo_usuario') === 'administrador';
-}
-```
+> ℹ️ **Nota**: Para usar la cámara en producción, el sitio debe ser serveido via **HTTPS**.
 
 ---
 
-### 2.2 `src/services/` - Re-exports
+## 📝 Instalación y Configuración
 
-**Propósito:** Mantener compatibilidad con importaciones existentes en el proyecto.
+### 1. Clonar el Repositorio
 
-**Archivos:**
-
-| Archivo | Descripción |
-|---------|-------------|
-| `auth.js` | Re-exporta todo de `../api/auth.js` |
-| `progreso.js` | Re-exporta todo de `../api/progreso.js` |
-| `logros.js` | Re-exporta todo de `../api/logros.js` |
-| `admin.js` | Re-exporta todo de `../api/admin.js` |
-
-**Nota:** Esta carpeta existe para compatibilidad hacia atrás. Las páginas pueden importar desde `services/` o directamente desde `api/`.
-
-**Ejemplo:**
-
-```javascript
-// services/auth.js
-export * from '../api/auth';
+```bash
+git clone https://github.com/Yiseth714/Frontend-con-React-Vite.git
+cd Frontend-con-React-Vite
 ```
 
----
+### 2. Instalar Dependencias
 
-### 2.3 `src/components/` - Componentes Globales
-
-**Propósito:** Componentes reutilizables en toda la aplicación.
-
-**Archivos:**
-
-| Archivo | Descripción |
-|---------|-------------|
-| `Layout.jsx` | Wrapper que incluye Header, Footer y contenido. |
-| `Header.jsx` | Barra de navegación con menú, autenticación. |
-| `Footer.jsx` | Pie de página simple. |
-| `ProtectedRoute.jsx` | Protege rutas que requieren autenticación. |
-| `Navigation.jsx` | Componente de navegación. |
-
-
-**Ejemplo (Layout.jsx):**
-
-```javascript
-import { Outlet } from 'react-router-dom';
-import Header from './Header';
-import Footer from './Footer';
-
-function Layout() {
-    return (
-        <div className="min-h-screen flex flex-col bg-secondary">
-            <Header />
-            <main className="flex-grow">
-                <Outlet />
-            </main>
-            <Footer />
-        </div>
-    );
-}
+```bash
+npm install
 ```
 
-**Ejemplo (ProtectedRoute.jsx):**
+### 3. Configurar Variables de Entorno
 
-```javascript
-import { Navigate, useLocation } from 'react-router-dom';
-import { estaAutenticado } from '../services/auth';
-
-function ProtectedRoute({ children }) {
-    const location = useLocation();
-    const autenticado = estaAutenticado();
-
-    if (!autenticado) {
-        return <Navigate to="/login" state={{ from: location }} replace />;
-    }
-
-    return children;
-}
-```
-
----
-
-### 2.4 `src/pages/` - Pantallas Completas
-
-**Propósito:** Componentes que representan páginas enteras de la aplicación.
-
-**Estructura:**
-
-| Página | Descripción |
-|--------|-------------|
-| `Login.jsx` | Formulario de inicio de sesión |
-| `Registro.jsx` | Formulario de registro de usuario |
-| `HomePages.jsx` | Página principal con cards de navegación |
-| `Diccionario.jsx` | Diccionario de señas (letras, números, palabras) |
-| `Traductor.jsx` | Traductor en tiempo real con cámara |
-| `Profile.jsx` | Perfil del usuario con logros |
-| `Admin.jsx` | Wrapper que redirige a admin/index.jsx |
-| `admin/index.jsx` | Panel de administración principal |
-
-**Sub-carpetas:**
-
-| Carpeta | Descripción |
-|---------|-------------|
-| `admin/` | Todo el panel de administración |
-| `RutaAprendizaje/` | Módulo de aprendizaje |
-
----
-
-### 2.5 `src/pages/admin/` - Panel de Administración
-
-**Propósito:** Componente y submódulos para el panel de admin.
-
-**Estructura:**
-
-```
-admin/
-├── index.jsx              # Componente principal (orquestador)
-├── components/            # Componentes del admin
-│   ├── Estadisticas.jsx  # Tarjetas de estadísticas
-│   ├── TablaUsuarios.jsx # Tabla con usuarios
-│   ├── ModalDetalle.jsx  # Modal para ver detalles
-│   ├── ModalEditar.jsx   # Modal para editar usuario
-│   └── UsuarioBadge.jsx  # Badges de tipo y discapacidad
-├── hooks/                 # Hooks específicos
-│   └── useAdmin.js       # Lógica de negocio del admin
-└── utils/                 # Utilidades
-    └── dateUtils.js       # Funciones para formatear fechas
-```
-
-**Componente principal (index.jsx):**
-
-```javascript
-// Orchestrator que une todos los componentes
-import { useState, useEffect } from 'react';
-import { useAdmin } from './hooks/useAdmin';
-import Estadisticas from './components/Estadisticas';
-import TablaUsuarios from './components/TablaUsuarios';
-import ModalDetalle from './components/ModalDetalle';
-import ModalEditar from './components/ModalEditar';
-
-function Admin() {
-    const { usuarios, estadisticas, cargando, error, ...metodos } = useAdmin();
-    // Renderiza componentes hijos
-}
-```
-
-**Hook useAdmin (lógica de negocio):**
-
-```javascript
-// hooks/useAdmin.js
-import { useState, useCallback } from 'react';
-import { obtenerUsuarios, obtenerEstadisticas, eliminarUsuario, ... } from '../../api/admin';
-
-export function useAdmin() {
-    const [usuarios, setUsuarios] = useState([]);
-    const [estadisticas, setEstadisticas] = useState(null);
-    const [cargando, setCargando] = useState(true);
-    const [error, setError] = useState('');
-
-    const cargarDatos = useCallback(async () => {
-        const [usuariosData, statsData] = await Promise.all([
-            obtenerUsuarios(),
-            obtenerEstadisticas(),
-        ]);
-        setUsuarios(usuariosData);
-        setEstadisticas(statsData);
-    }, []);
-
-    const eliminar = useCallback(async (usuarioId, nombre) => {
-        if (!confirm(`¿Eliminar a "${nombre}"?`)) return { success: false };
-        await eliminarUsuario(usuarioId);
-        setUsuarios(prev => prev.filter(u => u.id !== usuarioId));
-        return { success: true };
-    }, []);
-
-    return { usuarios, estadisticas, cargando, error, cargarDatos, eliminar, ... };
-}
-```
-
----
-
-### 2.6 `src/pages/RutaAprendizaje/` - Módulo de Aprendizaje
-
-**Propósito:** Páginas para la ruta de aprendizaje de señas.
-
-**Archivos:**
-
-| Archivo | Descripción |
-|---------|-------------|
-| `RutaHome.jsx` | Muestra progreso del usuario y botón a retos |
-| `Retos.jsx` | Lista de retos (1, 2, 3) con bloqueo |
-| `Reto.jsx` | Lección individual con preguntas y respuestas |
-
-**Flujo:**
-1. RutaHome → Muestra progreso actual
-2. Retos → Lista de retos disponibles (2 y 3 bloqueados hasta completar anteriores)
-3. Reto → Cuestionario con imágenes de señas
-
----
-
-### 2.7 `src/hooks/` - Hooks Globales
-
-**Propósito:** Hooks reutilizables en toda la aplicación.
-
-**Archivos:**
-
-| Archivo | Descripción |
-|---------|-------------|
-| `usePosts.js` | Hook para obtener/manej posts |
-
----
-
-### 2.8 `src/assets/` - Recursos Estáticos
-
-**Propósito:** Imágenes, iconos y otros archivos estáticos.
-
-**Estructura:**
-
-| Carpeta | Descripción |
-|---------|-------------|
-| `images/abecedario/` | Imágenes A-Z (señas del abecedario) |
-| `images/numeros/` | Imágenes 1-30 (señas de números) |
-| `images/palabras/` | Palabras por categorías |
-| `images/retos/` | Imágenes para los retos de aprendizaje |
-
----
-
-## 3. Configuración del Proyecto
-
-### 3.1 Variables de Entorno
-
-El proyecto usa variables de entorno de Vite. No hay archivo `.env` explícito, pero el código referencia:
-
-```javascript
-// En api/client.js
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
-const API_PREFIX = import.meta.env.VITE_API_PREFIX || '/api/v1';
-
-// En Traductor.jsx
-const API_BASE_URL = import.meta.env.VITE_TRANSLATOR_API_URL || 'http://127.0.0.1:5000';
-```
-
-**Para crear un archivo `.env`:**
+Crea un archivo `.env` en la raíz del proyecto:
 
 ```env
+# URL del servidor backend
 VITE_API_URL=http://localhost:8000
+
+# Prefijo de la API
 VITE_API_PREFIX=/api/v1
-VITE_TRANSLATOR_API_URL=http://127.0.0.1:5000
+
+# URL del WebSocket (opcional, tiene fallback)
+VITE_WS_URL=ws://localhost:8000/api/v1/traductor/ws
 ```
 
-### 3.2 Cliente HTTP
+O para desarrollo con SSL:
 
-**Archivo:** `src/api/client.js`
+```env
+VITE_API_URL=https://localhost:8000
+VITE_WS_URL=wss://localhost:8000/api/v1/traductor/ws
+```
+
+### 4. Iniciar Servidor de Desarrollo
+
+```bash
+npm run dev
+```
+
+El servidor arrancará en: `http://localhost:5173`
+
+> **Nota:** El proyecto usa HTTPS en desarrollo gracias al plugin `@vitejs/plugin-basic-ssl`.
+
+### 5. Construir para Producción
+
+```bash
+npm run build
+```
+
+Los archivos se generarán en la carpeta `dist/`.
+
+---
+
+## 🛤️ Rutas de la Aplicación
+
+| Ruta | Componente | Descripción | Autenticación |
+|------|------------|-------------|---------------|
+| `/` | HomePages | Página principal pública | No |
+| `/login` | Login | Formulario de inicio de sesión | No |
+| `/registro` | Registro | Formulario de registro | No |
+| `/traductor` | Traductor | Traductor en tiempo real | No |
+| `/diccionario` | Diccionario | Diccionario de señas | **Sí** |
+| `/ruta` | RutaHome | Ruta de aprendizaje | **Sí** |
+| `/ruta/retos` | Retos | Lista de retos disponibles | **Sí** |
+| `/ruta/retos/:id` | Reto | Detalle de un reto específico | **Sí** |
+| `/perfil` | Profile | Perfil del usuario | **Sí** |
+| `/admin` | admin/index | Panel de administración | **Sí** (admin) |
+
+---
+
+## 📖 Funcionalidades Principales
+
+### 1. 🔐 Autenticación
+
+El sistema de autenticación utiliza JWT (JSON Web Tokens) para mantener la sesión del usuario.
 
 **Características:**
-- URL base configurable con variables de entorno
-- Funciones: `get`, `post`, `put`, `del`
-- Manejo automático de tokens (Bearer)
-- Manejo de errores HTTP
+- Registro de usuarios con nombre, contraseña y tipo de discapacidad
+- Inicio de sesión con validación de credenciales
+- Roles de usuario: `normal` y `administrador`
+- Almacenamiento del token en localStorage
+- Protección de rutas mediante componentes HOC
 
-**Ejemplo de uso:**
-
-```javascript
-import { get, post, put, del } from '../api/client';
-
-// GET autenticado
-const usuarios = await get('/admin/usuarios', true);
-
-// POST sin auth
-const loginData = await post('/auth/login', { nombre_usuario, contrasena }, false);
-
-// PUT autenticado
-await put('/progreso/', { reto_actual: 2 }, true);
-
-// DELETE autenticado
-await del('/admin/usuarios/1', true);
+**Flujo de autenticación:**
+```
+1. Usuario llena el formulario de registro/login
+2. Frontend envía credenciales al backend via POST
+3. Backend valida y retorna token JWT
+4. Frontend guarda token en localStorage
+5. Token se envía en header Authorization en cada request
 ```
 
-### 3.3 Almacenamiento (localStorage)
+### 2. 📖 Diccionario
 
-**¿Dónde se guarda?**
+El diccionario visual incluye tres categorías principales:
 
-| Clave | Descripción |
-|-------|-------------|
-| `token` | Token de acceso JWT |
-| `nombre_usuario` | Nombre del usuario logueado |
-| `tipo_usuario` | Tipo: 'normal' o 'administrador' |
+**Alfabetos (A-Z)**
+- 26 letras del alfabeto en LSC
+- Imágenes de alta calidad para cada letra
 
-**Funciones auxiliares en auth.js:**
+**Números (1-30)**
+- Números del 1 al 30 en LSC
+- Representación visual clara
 
-```javascript
-export function estaAutenticado() {
-    const token = localStorage.getItem('token');
-    return token !== null;
-}
+**Palabras por categoría**
+- Saludos y cortesía: hola, gracias, por favor, etc.
+- Comidas y bebidas: arroz, leche, agua, etc.
+- Partes del cuerpo: cabeza, brazo, pierna, etc.
 
-export function obtenerNombreUsuario() {
-    return localStorage.getItem('nombre_usuario');
-}
+### 3. ✋ Traductor en Tiempo Real
 
-export function obtenerTipoUsuario() {
-    return localStorage.getItem('tipo_usuario');
-}
+El traductor es una de las características más innovadoras del proyecto.
 
-export function esAdministrador() {
-    return localStorage.getItem('tipo_usuario') === 'administrador';
-}
+#### Flujo de Datos
+
+```
+┌─────────────────────────────────────────────────────────────────────────┐
+│                           FRONTEND (React)                              │
+├─────────────────────────────────────────────────────────────────────────┤
+│                                                                         │
+│  ┌──────────┐    ┌──────────────┐    ┌────────────┐    ┌────────────┐  │
+│  │  CÁMARA  │───►│  MEDIAPIPE   │───►│  PROCESO   │───►│  WEBSOCKET │  │
+│  │  VIDEO   │    │   HANDS      │    │  LANDMARKS │    │   CLIENT   │  │
+│  └──────────┘    └──────────────┘    └────────────┘    └────────────┘  │
+│       │                │                   │                 │           │
+│       │           21 puntos          Normalizar         Enviar         │
+│       │          (x, y, z)           landmarks          datos          │
+│       │                                                    │           │
+│       ▼                                                    ▼           │
+│  ┌──────────────────────────────────────────────────────────────────┐   │
+│  │                   COMPONENTE TRADUCTOR.JSX                       │   │
+│  │                                                                  │   │
+│  │  - useSignLanguage hook (gestiona WebSocket)                   │   │
+│  │  - MediaPipe Hands (detecta manos)                              │   │
+│  │  - SpeechSynthesis (pronuncia palabras)                         │   │
+│  │  - UI (muestra cámara, predicciones, historial)                │   │
+│  └──────────────────────────────────────────────────────────────────┘   │
+│                                    │                                    │
+└────────────────────────────────────┼────────────────────────────────────┘
+                                     │ WebSocket
+                                     ▼
+┌─────────────────────────────────────────────────────────────────────────┐
+│                          BACKEND (FastAPI)                              │
+├─────────────────────────────────────────────────────────────────────────┤
+│                                                                         │
+│  ┌────────────┐    ┌─────────────────┐    ┌────────────────────────┐  │
+│  │  WEBSOCKET │───►│ SIGN MODEL      │───│   TENSORFLOW LSTM      │  │
+│  │  SERVER    │    │ HANDLER         │    │   (sign_model.h5)     │  │
+│  └────────────┘    └─────────────────┘    └────────────────────────┘  │
+│                                    │                                    │
+│                           Predicción + confianza                        │
+│                                    ▼                                    │
+│                     Responder con palabra predicha                      │
+│                                                                         │
+└─────────────────────────────────────────────────────────────────────────┘
 ```
 
----
+#### Hook useSignLanguage
 
-## 4. Router y Rutas
+El hook `useSignLanguage` es el核/core del traductor. Se encuentra en `src/hooks/useSignLanguage.js`.
 
-**Archivo:** `src/router.jsx`
+**Características del hook:**
+- Gestiona la conexión WebSocket automáticamente
+- Reconecta automáticamente si se pierde la conexión
+- Almacena historial de palabras traducidas
+- Integración con SpeechSynthesis para pronunciar
 
-**Estructura de rutas:**
+**Ejemplo de uso en Traductor.jsx:**
 
-| Ruta | Componente | Protección |
-|------|------------|------------|
-| `/login` | Login | Pública |
-| `/registro` | Registro | Pública |
-| `/` | Home | Pública |
-| `/traductor` | Traductor | Pública |
-| `/diccionario` | Diccionario | Requiere auth |
-| `/ruta` | RutaHome | Requiere auth |
-| `/ruta/retos` | Retos | Requiere auth |
-| `/ruta/retos/:id` | Reto | Requiere auth |
-| `/perfil` | Profile | Requiere auth |
-| `/admin` | Admin | Requiere ser admin |
+```jsx
+import { useSignLanguage } from '../hooks/useSignLanguage';
+import { Hands } from '@mediapipe/hands';
 
-**Ejemplo de ruta protegida:**
+function Traductor() {
+  const {
+    connected,
+    currentWord,
+    confidence,
+    history,
+    sendLandmarks
+  } = useSignLanguage();
 
-```javascript
-<Route
-    path="/admin"
-    element={
-        <ProtectedRoute>
-            <Admin />
-        </ProtectedRoute>
+  const onResults = (results) => {
+    if (results.multiHandLandmarks && results.multiHandLandmarks[0]) {
+      // Enviar los 21 landmarks al backend
+      sendLandmarks(results.multiHandLandmarks[0]);
     }
-/>
+  };
+
+  return (
+    <div>
+      <Camera onResults={onResults} />
+      <div>
+        <h2>Palabra: {currentWord}</h2>
+        <p>Confianza: {confidence}%</p>
+        <p>Estado: {connected ? 'Conectado' : 'Desconectado'}</h2>
+      </div>
+      <div>
+        <h3>Historial</h3>
+        {history.map((item, i) => (
+          <div key={i}>{item.word} ({item.confidence})</div>
+        ))}
+      </div>
+    </div>
+  );
+}
 ```
 
----
+#### Protocolo WebSocket
 
-## 5. Servicios de API
-
-### 5.1 Auth (api/auth.js)
-
-| Función | Endpoint | Auth | Descripción |
-|---------|----------|------|-------------|
-| `iniciarSesion()` | POST /auth/login | ❌ | Login de usuario |
-| `registrarUsuario()` | POST /auth/registro | ❌ | Registro nuevo |
-| `obtenerPerfil()` | GET /auth/perfil | ✅ | Datos del usuario |
-| `cerrarSesion()` | - | ❌ | Limpia localStorage |
-| `estaAutenticado()` | - | ❌ | Verifica token |
-| `esAdministrador()` | - | ❌ | Verifica rol admin |
-
-### 5.2 Progreso (api/progreso.js)
-
-| Función | Endpoint | Auth | Descripción |
-|---------|----------|------|-------------|
-| `crearProgreso()` | POST /progreso/ | ✅ | Crea progreso inicial |
-| `obtenerProgreso()` | GET /progreso/ | ✅ | Obtiene progreso |
-| `actualizarProgreso()` | PUT /progreso/ | ✅ | Actualiza progreso |
-| `marcarLeccionCompletada()` | POST /progreso/completar-leccion | ✅ | Marca lección |
-| `estaLeccionCompletada()` | - | ❌ | Verifica si completó |
-
-### 5.3 Logros (api/logros.js)
-
-| Función | Endpoint | Auth | Descripción |
-|---------|----------|------|-------------|
-| `obtenerLogros()` | GET /logros/ | ✅ | Lista logros usuario |
-| `crearLogro()` | POST /logros/ | ✅ | Crea nuevo logro |
-| `NOMBRES_LOGROS` | - | ❌ | Constantes de logros |
-| `tieneLogro()` | - | ❌ | Verifica logro |
-
-### 5.4 Admin (api/admin.js)
-
-| Función | Endpoint | Auth | Descripción |
-|---------|----------|------|-------------|
-| `obtenerUsuarios()` | GET /admin/usuarios | ✅ | Lista usuarios |
-| `obtenerUsuarioPorId()` | GET /admin/usuarios/{id} | ✅ | Un usuario |
-| `obtenerProgresoUsuario()` | GET /admin/usuarios/{id}/progreso | ✅ | Progreso de usuario |
-| `obtenerLogrosUsuario()` | GET /admin/usuarios/{id}/logros | ✅ | Logros de usuario |
-| `obtenerEstadisticas()` | GET /admin/estadisticas | ✅ | Estadísticas |
-| `eliminarUsuario()` | DELETE /admin/usuarios/{id} | ✅ | Elimina usuario |
-| `cambiarTipoUsuario()` | PUT /admin/usuarios/{id}/tipo | ✅ | Cambia rol |
-| `actualizarUsuario()` | PUT /admin/usuarios/{id} | ✅ | Edita usuario |
-
----
-
-## 6. Manejo de Estado
-
-### 6.1 Estado Local (useState)
-
-La mayoría de las páginas usan `useState` para manejar:
-
-- Formularios (login, registro)
-- Datos de API (usuarios, progreso, logros)
-- UI (modales, menús, cargas)
-
-### 6.2 Estado con localStorage
-
-**Persistido en localStorage:**
-
-- Token de sesión
-- Nombre de usuario
-- Tipo de usuario
-
-**No persistido (se carga de API):**
-
-- Progreso del usuario
-- Logros obtenidos
-- Datos de otros usuarios (admin)
-
-### 6.3 Custom Hooks
-
-**useAdmin:** Encapsula toda la lógica del panel de admin.
+**Mensajes enviados (Frontend → Backend):**
 
 ```javascript
-const { 
-    usuarios, 
-    estadisticas, 
-    cargando, 
-    error,
-    cargarDatos,
-    verDetalleUsuario,
-    eliminar,
-    cambiarTipo,
-    actualizar 
-} = useAdmin();
+// Envío de landmarks
+{
+  "landmarks": [
+    [0.123, 0.456, 0.789],  // Punto 1: muñeca
+    [0.234, 0.567, 0.890],  // Punto 2: pulgar
+    [0.345, 0.678, 0.901],  // Punto 3: indice
+    // ... 21 puntos en total (0-20)
+  ],
+  "hand_mode": 2  // 1 = mano izquierda, 2 = mano derecha
+}
+```
+
+**Mensajes recibidos (Backend → Frontend):**
+
+```javascript
+// Predicción exitosa
+{
+  "type": "prediction",
+  "word": "HOLA",
+  "confidence": 0.95
+}
+
+// Capturando frames (construyendo secuencia)
+{
+  "type": "capturing",
+  "frames": 15
+}
+
+// Esperando mano
+{
+  "type": "waiting"
+}
+```
+
+### 4. 🎓 Ruta de Aprendizaje
+
+Sistema de aprendizaje progresivo estructurado en retos.
+
+**Estructura:**
+- **3 retos principales** que se deben completar en orden
+- Cada reto contiene **lecciones** con preguntas de opción múltiple
+- El progreso se guarda en la base de datos
+- Desbloqueo progresivo: solo puedes acceder al siguiente reto cuando completes el actual
+
+**Estados del usuario:**
+- Reto no disponible (locked)
+- Reto disponible para iniciar
+- Lección en progreso
+- Lección completada
+
+### 5. ⚙️ Panel de Administración
+
+Accesible solo para usuarios con rol `administrador`.
+
+**Funcionalidades:**
+- Ver lista completa de usuarios registrados
+- Editar información de usuarios
+- Eliminar usuarios del sistema
+- Cambiar rol de usuario (normal ↔ administrador)
+- Ver progreso de cualquier usuario
+- Ver logros obtenidos por cualquier usuario
+
+---
+
+## ⚠️ Limitación del Modelo (Importante)
+
+> **ADVERTENCIA**: El modelo de TensorFlow en el backend se carga como una **instancia global**. Esto afecta al frontend de la siguiente manera:
+
+- **Solo un usuario** puede usar el traductor simultáneamente
+- Si múltiples usuarios intentas usar el traductor al mismo tiempo, las predicciones pueden interferir
+- La secuencia de frames se resetea cuando el modelo procesa una nueva predicción
+
+**Recomendaciones:**
+- Limita el acceso al traductor a un usuario a la vez
+- Considera implementar una cola de espera
+- Para producción, el traductor debería desplegarse como un microservicio separado
+
+---
+
+## 🔌 Integración con el Backend
+
+### Cliente HTTP
+
+El proyecto usa un cliente HTTP centralizado en `src/api/client.js`:
+
+```javascript
+import axios from 'axios';
+
+const client = axios.create({
+  baseURL: import.meta.env.VITE_API_URL + import.meta.env.VITE_API_PREFIX,
+  headers: {
+    'Content-Type': 'application/json'
+  }
+});
+
+// Interceptor para agregar token JWT
+client.interceptors.request.use(config => {
+  const token = localStorage.getItem('token');
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+  return config;
+});
+
+export default client;
+```
+
+### WebSocket para el Traductor
+
+```javascript
+const ws = new WebSocket(import.meta.env.VITE_WS_URL);
+
+ws.onmessage = (event) => {
+  const data = JSON.parse(event.data);
+  
+  if (data.type === 'prediction') {
+    // Mostrar palabra predicha
+    speakWord(data.word);
+  }
+};
+
+function sendLandmarks(landmarks) {
+  ws.send(JSON.stringify({
+    landmarks: landmarks,
+    hand_mode: 2
+  }));
+}
 ```
 
 ---
 
-## 7. Estilos (TailwindCSS)
+## ❓ Solución de Problemas Comunes
 
-### 7.1 Configuración
+### Error: "CORS policy blocked"
+```
+Access to XMLHttpRequest at 'http://localhost:8000/api/v1/auth/login' 
+from origin 'http://localhost:5173' has been blocked by CORS policy
+```
+**Solución:**
+- El backend debe tener configurado CORS con el origen del frontend
+- Verifica que `VITE_API_URL` en el frontend coincide con la URL del backend
+- Asegúrate de que el backend tiene `allow_origins` configurado correctamente
 
-- **Tailwind:** `tailwind.config.js`
-- **PostCSS:** `postcss.config.js`
-- **Estilos globales:** `src/style.css`
+### Error: WebSocket connection failed
+```
+WebSocket connection to 'ws://localhost:8000/api/v1/traductor/ws' failed
+```
+**Solución:**
+- El servidor backend debe estar ejecutándose
+- Verifica que el puerto 8000 está disponible
+- Revisa la consola del navegador para más detalles
+- Si usas HTTPS, usa `wss://` en lugar de `ws://`
 
-### 7.2 Clases Usadas
+### Error: Camera not available
+```
+NotAllowedError: Permission denied or response denied
+```
+**Solución:**
+- Permisos de cámara bloqueados en el navegador
+- Verifica que allows camera access en la configuración del navegador
+- Usa HTTPS en producción para acceder a la cámara (requerido por navegadores)
+- Confirma que ningún otro programa esté usando la cámara
 
-| Clase | Uso |
-|-------|-----|
-| `grid`, `grid-cols-4`, `md:grid-cols-8` | Grids responsivos |
-| `flex`, `flex-col` | Layouts |
-| `px-4`, `py-2`, `md:px-8` | Padding responsivo |
-| `bg-primary`, `text-primary` | Colores del tema |
-| `hover:bg-*`, `transition` | Interacciones |
-| `rounded-lg`, `shadow-lg` | Bordes y sombras |
-| `hidden md:block` | Visibility responsiva |
+### Error: Model prediction failed
+```
+Error: Model prediction failed
+```
+**Solución:**
+- El modelo de TensorFlow no cargó correctamente
+- Verifica que el backend tiene el archivo `sign_model.h5`
+- Revisa los logs del servidor para errores de carga
+- Asegúrate de que TensorFlow está instalado correctamente
+
+### La página no carga después de hacer build
+```
+Cannot GET /diccionario
+```
+**Solución:**
+- Configura correctamente la variable `VITE_API_URL` en producción
+- Para Nginx, agrega configuración de rewrite:
+  ```nginx
+  location / {
+    try_files $uri $uri/ /index.html;
+  }
+  ```
+- Para Apache, usa el archivo `.htaccess` con mod_rewrite
+
+### Problemas con TailwindCSS
+```
+Error: CSS class not found
+```
+**Solución:**
+- Ejecuta `npm run build` para regenerar los estilos
+- Verifica que `tailwind.config.js` tiene la ruta correcta:
+  ```javascript
+  content: ["./index.html", "./src/**/*.{js,jsx}"],
+  ```
+- Asegúrate de importar tailwind en `style.css`:
+  ```css
+  @tailwind base;
+  @tailwind components;
+  @tailwind utilities;
+  ```
+
+### Error: Token JWT expirado
+```
+401 Unauthorized: "No se pudo validar las credenciales"
+```
+**Solución:**
+- El token JWT expiró (por defecto 30 minutos)
+- Implementa refresh token o muestra mensaje para iniciar sesión nuevamente
+- Verifica la configuración `ACCESS_TOKEN_EXPIRE_MINUTES` en el backend
 
 ---
 
-## 8. Diferencias: React Vite vs React Native
+## 🎨 Personalización
 
-### 8.1 Entorno
+### Cambiar Colores Principales
 
-| Aspecto | React Vite (Web) | React Native (Móvil) |
-|---------|------------------|----------------------|
-| Plataforma | Navegador | iOS/Android |
-| Componentes | `<div>`, `<button>` | `<View>`, `<TouchableOpacity>` |
-| Estilos | CSS/Tailwind | StyleSheet |
-| Routing | react-router-dom | @react-navigation |
-| Storage | localStorage | AsyncStorage |
+Edita `tailwind.config.js`:
 
-### 8.2 Lo que cambia en tu código
+```javascript
+export default {
+  content: ["./index.html", "./src/**/*.{js,jsx}"],
+  theme: {
+    extend: {
+      colors: {
+        primary: {
+          50: '#eff6ff',
+          100: '#dbeafe',
+          500: '#3b82f6',  // Cambia este color
+          600: '#2563eb',
+          700: '#1d4ed8',
+        }
+      }
+    }
+  },
+  plugins: [],
+}
+```
 
-| Lo que usas | En React Native sería |
-|--------------|----------------------|
-| `localStorage` | `AsyncStorage` |
-| `fetch` | `fetch` (igual) |
-| `useState`, `useEffect` | `useState`, `useEffect` (igual) |
-| `<Link>` | `navigation.navigate()` |
-| TailwindCSS | StyleSheet.create() |
+### Agregar Nueva Página
 
-### 8.3 Lo que NO cambia
-
-- Estructura de carpetas (similar)
-- Componentes funcionales
-- Hooks personalizados
-- Lógica de negocio
-- Patrones de API (mismo backend)
-
----
-
-## 9. Checklist de Mejoras Opcionales
-
-### Alta Prioridad
-
-- [x] Cliente API centralizado
-- [x] Servicios por módulo
-- [x] Router con protección
-- [x] Layout con Header/Footer
-
-### Media Prioridad
-
-- [ ] Context API para auth (reemplazar localStorage directo)
-- [ ] Hooks globales (useAuth, useFetch)
-- [ ] Manejo de errores centralizado
-- [ ] Validaciones de formularios
-
-### Baja Prioridad
-
-- [ ] Theme context (modo oscuro)
-- [ ] Componentes UI reutilizables
-- [ ] Lazy loading
-- [ ] Optimización (memo, useMemo)
+1. Crea el componente en `src/pages/`
+2. Agrega la ruta en `src/router.jsx`:
+   ```jsx
+   <Route path="/nueva-ruta" element={<NuevaPagina />} />
+   ```
 
 ---
 
-## Resumen
+## 📄 Licencia
 
-Tu frontend tiene una **estructura funcional y bien organizada**:
+Este proyecto está bajo la licencia MIT.
 
-- ✅ Cliente API centralizado
-- ✅ Servicios bien separados por módulo
-- ✅ Router con rutas protegidas
-- ✅ Componentes separados (layout, pages, admin)
-- ✅ Hook personalizado para admin (useAdmin)
-- ✅ Estilos con TailwindCSS responsivos
-- ✅ Imágenes organizadas por categorías
+---
 
-**Nivel de madurez:** 4/5 ⭐
+## 🤝 Contribuidores
 
-Las mejoras sugeridas son opcionales y dependerán del crecimiento del proyecto.
-
-## Revisión de compatibilidad del traductor con dispositivos moviles
-
-README HTTPS local con Vite y mkcert
-
-Resumen
-Este proyecto usa Vite (rolldown-vite) con React y levanta el servidor de desarrollo en HTTPS.
-La configuracion esta en Frontend-con-React-Vite\vite.config.js con server.https: true y el plugin @vitejs/plugin-basic-ssl.
-
-Como funciona mkcert
-mkcert es una herramienta externa para generar certificados TLS de desarrollo confiables en tu maquina local.
-Flujo tipico:
-- Crea una Autoridad Certificadora (CA) local y la instala en el almacén de confianza del sistema.
-- Genera un certificado y una clave para dominios como localhost o una IP local.
-- Esos archivos se usan por el servidor de desarrollo (por ejemplo Vite) para servir HTTPS sin advertencias del navegador.
-En este proyecto no hay certificados versionados en el repositorio; si usas mkcert, los archivos quedan en el perfil del usuario.
-
-Librerias usadas para el puente HTTPS
-- Vite (rolldown-vite@7.2.2): servidor dev que expone HTTP/HTTPS.
-- @vitejs/plugin-basic-ssl: crea o administra un certificado de desarrollo y habilita HTTPS en Vite.
-- Node.js https (interno de Vite): se encarga de servir el contenido con TLS.
-
-Archivos y carpetas creadas o usadas
-- Frontend-con-React-Vite\vite.config.js: configuracion de servidor HTTPS.
-- Frontend-con-React-Vite\node_modules\.vite\basic-ssl\_cert.pem: certificado generado en runtime por el plugin basic-ssl.
-- (Opcional, si se ejecuta mkcert) Archivos de CA y certificados en el perfil del usuario; no se guardan en el repositorio.
-
-.env.development 
-Le dice a React vite en que URL está funcionando el backend
+Proyecto desarrollado por el equipo de SeñaGo.

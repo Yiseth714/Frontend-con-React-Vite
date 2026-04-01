@@ -10,6 +10,7 @@ const LOCAL_HTTP_PORT = 5174
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [
+    
     react(),
 //    basicSsl(), // Habilita HTTPS en el dev server
     {
