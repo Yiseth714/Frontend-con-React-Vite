@@ -89,7 +89,7 @@ const retosData = {
       },
       {
         pregunta: "¿Qué color representa esta seña?",
-        opciones: ["Morado", "Naranja", "Rosado"],
+        opciones: ["Rosado", "Naranja", "Morado"],
         imagen: new URL(
           "../../assets/images/retos/reto3/leccion3.png",
           import.meta.url
@@ -314,7 +314,7 @@ const retosData = {
         imagen: null,
       },
       {
-        pregunta: "¿Cuál seña representa la palabra verano?",
+        pregunta: "¿Cuál seña representa la palabra febrero?",
         opciones: [
           new URL("../../assets/images/retos/reto10/opcionA3.png", import.meta.url).href,
           new URL("../../assets/images/retos/reto10/opcionB3.png", import.meta.url).href,

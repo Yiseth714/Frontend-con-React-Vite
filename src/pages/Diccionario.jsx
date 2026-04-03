@@ -32,21 +32,26 @@ const categoriasPalabras = [
       { texto: "Sí", archivo: "si.png.png" },
       { texto: "No", archivo: "no.png.png" },
       { texto: "De nada", archivo: "de-nada.png.png" },
-      { texto: "Cuidado", archivo: "cuidado.png.png" }
+      { texto: "Cuidado", archivo: "cuidado.png.png" },
+      { texto: "Bienvenido", archivo: "bienvenido.png.png" }
     ]
   },
   {
     titulo: "Comidas y bebidas",
     carpeta: "comidas-bebidas",
     items: [
-      { texto: "Comida", archivo: "comida-dibujo.png" },
-      { texto: "Bebida", archivo: "bebida-dibujo.png" },
-      { texto: "Arroz", archivo: "arroz-dibujo.png" },
-      { texto: "Leche", archivo: "leche-dibujo.png" },
-      { texto: "Naranja", archivo: "naranja-dibujo.png" },
-      { texto: "Desayuno", archivo: "desayuno-dibujo.png" },
-      { texto: "Hambre", archivo: "hambre-dibujo.png" },
-      { texto: "Sed", archivo: "sed-dibujo.png" }
+      { texto: "Comida", archivo: "comida.png" },
+      { texto: "Bebida", archivo: "bebida.png" },
+      { texto: "Arroz", archivo: "arroz.png" },
+      { texto: "Leche", archivo: "leche.png" },
+      { texto: "Naranja", archivo: "naranja.png" },
+      { texto: "Desayuno", archivo: "desayuno.png" },
+      { texto: "Hambre", archivo: "hambre.png" },
+      { texto: "Sed", archivo: "sed.png" },
+      { texto: "Banano", archivo: "banano.png" },
+      { texto: "Fresa", archivo: "fresa.png" },
+      { texto: "Fruta", archivo: "fruta.png" },
+      { texto: "Manzana", archivo: "manzana.png" }
     ]
   },
   {
@@ -58,7 +63,13 @@ const categoriasPalabras = [
       { texto: "Brazo", archivo: "brazo.png" },
       { texto: "Cuerpo", archivo: "cuerpo.png" },
       { texto: "Pierna", archivo: "pierna.png" },
-      { texto: "Pie", archivo: "pie.png" }
+      { texto: "Pie", archivo: "pie.png" },
+      { texto: "Cabello", archivo: "cabello.png" },
+      { texto: "Cara", archivo: "cara.png" },
+      { texto: "Corazón", archivo: "corazon.png" },
+      { texto: "Cuello", archivo: "cuello.png" },
+      { texto: "Dientes", archivo: "dientes.png" },
+      { texto: "Estomago", archivo: "estomago.png" }
     ]
   }
 ];

@@ -74,7 +74,7 @@ export const tourDiccionario = () => {
       popover: {
         title: "Selecciona una letra 🔤",
         description:
-          "Haz clic en cualquier letra para ver cómo se representa en lengua de señas.",
+          "Haz click en cualquier letra, número o palabra para ver cómo se representa en lengua de señas.",
         side: "bottom",
       },
     },
